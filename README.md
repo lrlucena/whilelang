@@ -4,7 +4,7 @@ While language
   A small programming language created with ANTLR and Scala
 
 Only 267 lines of code:
-  - [Grammar](src/whilelang/Whilelang.g4) (36 lines) (36 lines)
+  - [Grammar](src/whilelang/Whilelang.g4) (36 lines)
   - [Listener](src/whilelang/MyListener.scala) (97 lines)
   - [Language](src/whilelang/Language.scala) (88 lines)
   - [Main](src/whilelang/Main.scala) (30 lines)
