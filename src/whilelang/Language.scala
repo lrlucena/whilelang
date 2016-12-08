@@ -1,9 +1,7 @@
 package whilelang
 
-import scala.collection.mutable.Map
-
 object Language {
-  val memory = Map[String, Int]()
+  val memory = scala.collection.mutable.Map[String, Int]()
   trait Bool {
     def value: Boolean
   } 
