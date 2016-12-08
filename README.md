@@ -3,12 +3,12 @@ While language
 
   A small programming language created with ANTLR and Scala
 
-Only 272 lines of code:
-  - Grammar (37 lines)
+Only 267 lines of code:
+  - Grammar (36 lines)
   - Listener (97 lines)
-  - Language (90 lines)
-  - Main (31 lines)
-  - Antlr2Scala (17 lines)
+  - Language (88 lines)
+  - Main (30 lines)
+  - Antlr2Scala (16 lines)
 
 Grammar
 ====
