@@ -1,6 +1,8 @@
 While language
 =====
 
+  A small programming language created with ANTLR and Scala
+
 Only 272 lines of code:
   - Grammar (37 lines)
   - Listener (97 lines)
