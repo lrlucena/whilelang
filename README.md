@@ -33,8 +33,7 @@ expression: INT                                        # int
           | 'read'                                     # read
           | ID                                         # id
           | expression '*' expression                  # binOp
-          | expression '+' expression                  # binOp
-          | expression '-' expression                  # binOp
+          | expression ('+'|'-') expression            # binOp
           | '(' expression ')'                         # expParen
           ;
 
