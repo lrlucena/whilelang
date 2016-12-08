@@ -11,7 +11,7 @@ object Main extends App {
     val lexer = new WhilelangLexer(input)
     val tokens = new CommonTokenStream(lexer)
     val parser = new WhilelangParser(tokens)
-    val tree = parser.program;
+    val tree = parser.program
     val walker = new ParseTreeWalker()
     val listener = new MyListener()
     walker.walk(listener, tree)
@@ -19,8 +19,7 @@ object Main extends App {
   }
 
   if (args.length > 0) {
-    val filename = args(0)
-    val sourceCode = Try(Source.fromFile(filename).getLines.mkString("\n"))
+    val sourceCode = Try(Source.fromFile(args(0)).getLines.mkString("\n"))
     sourceCode match {
       case Success(code) => parse(code).execute
       case Failure(_)    => println("File not found")
