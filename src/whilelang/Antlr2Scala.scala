@@ -1,8 +1,7 @@
 package whilelang
 
 import org.antlr.v4.runtime.ParserRuleContext
-import org.antlr.v4.runtime.tree.ParseTree
-import org.antlr.v4.runtime.tree.ParseTreeProperty
+import org.antlr.v4.runtime.tree.{ParseTree, ParseTreeProperty}
 
 trait Antlr2Scala {
   protected val values = new ParseTreeProperty[Any]
