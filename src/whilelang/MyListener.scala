@@ -35,7 +35,7 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala {
   }
 
   override def exitPrint(ctx: C.PrintContext) = {
-    ctx.value = Print(ctx.Text.text)
+    ctx.value = Print(ctx.Text.text.drop(1).dropRight(1))
   } 
 
   override def exitWrite(ctx: C.WriteContext) = {
