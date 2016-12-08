@@ -1,7 +1,7 @@
-Whilelang
+While language
 =====
 
-Only (272 lines of code):
+Only 272 lines of code:
   - Grammar (37 lines)
   - Listener (97 lines)
   - Language (90 lines)
