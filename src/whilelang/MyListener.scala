@@ -27,11 +27,11 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala {
   }
 
   override def exitIf(ctx: C.IfContext) = {
-    ctx.value = new If(ctx.bool.value, ctx.statement(0).value, ctx.statement(1).value)
+    ctx.value = If(ctx.bool.value, ctx.statement(0).value, ctx.statement(1).value)
   }
 
   override def exitWhile(ctx: C.WhileContext) {
-    ctx.value = new While(ctx.bool.value, ctx.statement.value)
+    ctx.value = While(ctx.bool.value, ctx.statement.value)
   }
 
   override def exitPrint(ctx: C.PrintContext) = {
