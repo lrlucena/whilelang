@@ -9,13 +9,11 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala {
   def program = _program
 
   override def exitProgram(ctx: C.ProgramContext) {
-    ctx.value = Program(ctx.seqStatement.value[List[Statement]])
-    _program = ctx.value
+    _program = Program(ctx.seqStatement.value[List[Statement]])
   }
 
   override def exitSeqStatement(ctx: C.SeqStatementContext) {
-    val cmds = ctx.statement().asScala.toList.map { _.value[Statement] }
-    ctx.value = cmds
+    ctx.value = ctx.statement().asScala.toList.map { _.value[Statement] }
   }
 
   override def exitAttrib(ctx: C.AttribContext) {
