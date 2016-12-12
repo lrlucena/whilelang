@@ -7,10 +7,7 @@ import scala.util.{ Try, Success, Failure }
 
 object Main extends App {
   def parse(source: String) = {
-    val input = new ANTLRInputStream(source)
-    val lexer = new WhilelangLexer(input)
-    val tokens = new CommonTokenStream(lexer)
-    val parser = new WhilelangParser(tokens)
+    val parser = new WhilelangParser(new CommonTokenStream(new WhilelangLexer(new ANTLRInputStream(source))))
     val tree = parser.program
     val walker = new ParseTreeWalker()
     val listener = new MyListener()
@@ -18,13 +15,9 @@ object Main extends App {
     listener.program
   }
 
-  if (args.length > 0) {
-    val sourceCode = Try(Source.fromFile(args(0)).getLines.mkString("\n"))
-    sourceCode match {
-      case Success(code) => parse(code).execute
-      case Failure(_)    => println("File not found")
-    }
-  } else {
-    println("Please include the filename.")
+  val sourceCode = Try(Source.fromFile(args(0)).getLines.mkString("\n"))
+  sourceCode match {
+    case Success(code) => parse(code).execute
+    case Failure(_)    => println("File not found")
   }
 }
