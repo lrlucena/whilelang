@@ -14,7 +14,7 @@ Only 257 lines of code:
 Grammar
 ====
 
-```ANTLR
+```antlr
 grammar Whilelang;
 
 program : seqStatement;
