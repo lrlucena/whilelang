@@ -56,7 +56,7 @@ Space: [ \t\n\r] -> skip;
 Listener
 ====
 
-````
+````scala
 package whilelang
 
 import whilelang.{ WhilelangParser => C } 
@@ -157,7 +157,7 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala {
 Language
 ====
 
-````
+````scala
 package whilelang
 
 object Language {
@@ -222,7 +222,7 @@ private[this] object Exec {
 
 Main
 ====
-````
+````scala
 package whilelang
 
 import org.antlr.v4.runtime.{ ANTLRInputStream, CommonTokenStream }
@@ -250,7 +250,7 @@ object Main extends App {
 
 Antrl2Scala
 ====
-````
+````scala
 package whilelang
 
 import org.antlr.v4.runtime.ParserRuleContext
