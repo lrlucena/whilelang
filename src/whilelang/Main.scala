@@ -8,10 +8,9 @@ import scala.util.{ Try, Success, Failure }
 object Main extends App {
   def parse(source: String) = {
     val parser = new WhilelangParser(new CommonTokenStream(new WhilelangLexer(new ANTLRInputStream(source))))
-    val tree = parser.program
     val walker = new ParseTreeWalker()
     val listener = new MyListener()
-    walker.walk(listener, tree)
+    walker.walk(listener, parser.program)
     listener.program
   }
 
