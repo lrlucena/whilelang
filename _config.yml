@@ -2,4 +2,4 @@ show_downloads: true
 theme: jekyll-theme-dinky
 
 gems:
-  - jekyll-avatar
+  - jekyll-sitemap
