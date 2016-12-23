@@ -3,11 +3,11 @@ While language
 
   A small programming language created with ANTLR and Scala
 
-Only 257 lines of code:
+Only 239 lines of code:
 
   - [Grammar](#grammar) (36 lines)
   - [Listener](#listener) (95 lines)
-  - [Language](#language) (88 lines) or [Language1](src/whilelang/Language1.scala) (90 lines) or [Language2](src/whilelang/Language2.scala) (60 lines)
+  - [Language](#language) (60 lines) or [Language1](src/whilelang/Language1.scala) (90 lines) or [Language2](src/whilelang/Language.scala) (88 lines)
   - [Main](#ain) (22 lines)
   - [Antlr2Scala](#antlr2scala) (16 lines)
 
@@ -232,8 +232,8 @@ import scala.util.{ Try, Success, Failure }
 
 object Main extends App {
   def parse(source: String) = {
-    val parser = new WhilelangParser(new CommonTokenStream(new WhilelangLexer(new ANTLRInputStream(source))))
-    val walker = new ParseTreeWalker()
+    val parser   = new WhilelangParser(new CommonTokenStream(new WhilelangLexer(new ANTLRInputStream(source))))
+    val walker   = new ParseTreeWalker()
     val listener = new MyListener()
     walker.walk(listener, parser.program)
     listener.program
@@ -259,8 +259,8 @@ import org.antlr.v4.runtime.tree.{ParseTree, ParseTreeProperty}
 trait Antlr2Scala {
   protected val values = new ParseTreeProperty[Any]
   protected implicit class rule2scala(rule: ParserRuleContext) {
-    def apply(i: Int) = rule.getChild(i)
-    def value[T]: T = values.get(rule).asInstanceOf[T]
+    def apply(i: Int)   = rule.getChild(i)
+    def value[T]: T     = values.get(rule).asInstanceOf[T]
     def value_=(v: Any) = values.put(rule, v)
   }
   protected implicit class tree2scala(tree: ParseTree) {
