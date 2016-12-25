@@ -3,12 +3,12 @@ While language
 
   A small programming language created with ANTLR and Scala
 
-Only 232 lines of code:
+Only 231 lines of code:
 
   - [Grammar](#grammar) (32 lines)
   - [Listener](#listener) (95 lines)
   - [Language](#language) (60 lines) or [Language1](src/whilelang/Language1.scala) (90 lines) or [Language2](src/whilelang/Language.scala) (88 lines)
-  - [Main](#ain) (22 lines)
+  - [Main](#ain) (21 lines)
   - [Antlr2Scala](#antlr2scala) (13 lines)
 
 Grammar
@@ -223,7 +223,6 @@ package whilelang
 
 import org.antlr.v4.runtime.{ ANTLRInputStream, CommonTokenStream }
 import org.antlr.v4.runtime.tree.ParseTreeWalker
-import scala.io.Source
 import scala.util.{ Try, Success, Failure }
 
 object Main extends App {
@@ -235,7 +234,7 @@ object Main extends App {
     listener.program
   }
 
-  val sourceCode = Try(Source.fromFile(args(0)).getLines.mkString("\n"))
+  val sourceCode = Try(io.Source.fromFile(args(0)).getLines.mkString("\n"))
   sourceCode match {
     case Success(code) => parse(code).execute
     case Failure(_)    => println("File not found")
