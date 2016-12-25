@@ -3,9 +3,9 @@ While language
 
   A small programming language created with ANTLR and Scala
 
-Only 236 lines of code:
+Only 232 lines of code:
 
-  - [Grammar](#grammar) (36 lines)
+  - [Grammar](#grammar) (32 lines)
   - [Listener](#listener) (95 lines)
   - [Language](#language) (60 lines) or [Language1](src/whilelang/Language1.scala) (90 lines) or [Language2](src/whilelang/Language.scala) (88 lines)
   - [Main](#ain) (22 lines)
@@ -27,29 +27,25 @@ statement: ID ':=' expression                          # attrib
          | 'while' bool 'do' statement                 # while
          | 'print' Text                                # print
          | 'write' expression                          # write
-         | '{' seqStatement '}'                        # block
-         ;
+         | '{' seqStatement '}'                        # block ;
 
 expression: INT                                        # int
           | 'read'                                     # read
           | ID                                         # id
           | expression '*' expression                  # binOp
           | expression ('+'|'-') expression            # binOp
-          | '(' expression ')'                         # expParen
-          ;
+          | '(' expression ')'                         # expParen ;
 
 bool: ('true'|'false')                                 # boolean
     | expression '=' expression                        # relOp
     | expression '<=' expression                       # relOp
     | 'not' bool                                       # not
     | bool 'and' bool                                  # and
-    | '(' bool ')'                                     # boolParen
-    ;
+    | '(' bool ')'                                     # boolParen ;
 
 INT: ('0'..'9')+ ;
 ID: ('a'..'z')+;
 Text: '"' .*? '"';
-
 Space: [ \t\n\r] -> skip;
 ```
 
