@@ -3,10 +3,10 @@ While language
 
   A small programming language created with ANTLR and Scala
 
-Only 214 lines of code:
+Only 210 lines of code:
 
   - [Grammar](#grammar) (32 lines)
-  - [Listener](#listener) (78 lines)
+  - [Listener](#listener) (74 lines)
   - [Language](#language) (60 lines) or [Language1](src/whilelang/Language1.scala) (90 lines) or [Language2](src/whilelang/Language.scala) (88 lines)
   - [Main](#ain) (21 lines)
   - [Antlr2Scala](#antlr2scala) (13 lines)
@@ -102,14 +102,12 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala {
   override def exitInt(ctx: C.IntContext) =
     ctx.value = Integer(ctx.text.toInt)
 
-  override def exitBinOp(ctx: C.BinOpContext) = {
-    val exp = ctx(1).text match {
+  override def exitBinOp(ctx: C.BinOpContext) =
+    ctx.value = (ctx(1).text match {
       case "*"     => ExpMult
       case "-"     => ExpSub
       case "+" | _ => ExpSum
-    }
-    ctx.value = exp(ctx.expression(0).value, ctx.expression(1).value)
-  }
+    })(ctx.expression(0).value, ctx.expression(1).value)
 
   override def exitNot(ctx: C.NotContext) =
     ctx.value = Not(ctx.bool.value)
@@ -123,13 +121,11 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala {
   override def exitBoolParen(ctx: C.BoolParenContext) =
     ctx.value = ctx.bool.value
 
-  override def exitRelOp(ctx: C.RelOpContext) = {
-    val exp = ctx(1).text match {
+  override def exitRelOp(ctx: C.RelOpContext) =
+    ctx.value = (ctx(1).text match {
       case "="      => ExpEqual
       case "<=" | _ => ExpLessOrEqualThan
-    }
-    ctx.value = exp(ctx.expression(0).value, ctx.expression(1).value)
-  }
+    })(ctx.expression(0).value, ctx.expression(1).value)
 }
 ````
 
