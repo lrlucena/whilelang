@@ -3,13 +3,13 @@ While language
 
   A small programming language created with ANTLR and Scala
 
-Only 239 lines of code:
+Only 236 lines of code:
 
   - [Grammar](#grammar) (36 lines)
   - [Listener](#listener) (95 lines)
   - [Language](#language) (60 lines) or [Language1](src/whilelang/Language1.scala) (90 lines) or [Language2](src/whilelang/Language.scala) (88 lines)
   - [Main](#ain) (22 lines)
-  - [Antlr2Scala](#antlr2scala) (16 lines)
+  - [Antlr2Scala](#antlr2scala) (13 lines)
 
 Grammar
 ====
@@ -253,18 +253,15 @@ Antrl2Scala
 ````scala
 package whilelang
 
-import org.antlr.v4.runtime.ParserRuleContext
 import org.antlr.v4.runtime.tree.{ParseTree, ParseTreeProperty}
 
 trait Antlr2Scala {
   protected val values = new ParseTreeProperty[Any]
-  protected implicit class rule2scala(rule: ParserRuleContext) {
-    def apply(i: Int)   = rule.getChild(i)
-    def value[T]: T     = values.get(rule).asInstanceOf[T]
-    def value_=(v: Any) = values.put(rule, v)
-  }
   protected implicit class tree2scala(tree: ParseTree) {
+    def apply(i: Int) = tree.getChild(i)
     def text = tree.getText
+    def value[T]: T = values.get(tree).asInstanceOf[T]
+    def value_=(v: Any) = values.put(tree, v)
   }
 }
 ````
