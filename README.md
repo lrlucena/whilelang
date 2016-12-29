@@ -1,6 +1,8 @@
 While language
 =====
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1705795c5f74b9289b6f4c942dd5911)](https://www.codacy.com/app/leonardo-lucena/whilelang?utm_source=github.com&utm_medium=referral&utm_content=lrlucena/whilelang&utm_campaign=badger)
+
   A small programming language created with ANTLR and Scala
 
 Only 210 lines of code:
