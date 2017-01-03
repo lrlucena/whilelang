@@ -6,8 +6,8 @@ While language
 Only 210 lines of code:
 
   - [Grammar](#grammar) (32 lines)
-  - [Listener](#listener) (74 lines)
-  - [Language](#language) (60 lines) or [Language1](src/whilelang/Language1.scala) (90 lines) or [Language2](src/whilelang/Language.scala) (88 lines)
+  - [Parser Rules](#listener) (74 lines)
+  - [Language (Abstract Syntax and Semantics)](#language) (60 lines) 
   - [Main](#main) (21 lines)
   - [Antlr2Scala](#antlr2scala) (13 lines)
 
