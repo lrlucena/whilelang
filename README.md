@@ -8,7 +8,7 @@ Only 210 lines of code:
   - [Grammar](#grammar) (32 lines)
   - [Listener](#listener) (74 lines)
   - [Language](#language) (60 lines) or [Language1](src/whilelang/Language1.scala) (90 lines) or [Language2](src/whilelang/Language.scala) (88 lines)
-  - [Main](#ain) (21 lines)
+  - [Main](#main) (21 lines)
   - [Antlr2Scala](#antlr2scala) (13 lines)
 
 Grammar
@@ -222,7 +222,7 @@ object Main extends App {
 ````
 
 
-Antrl2Scala
+Antlr2Scala
 ====
 ````scala
 package whilelang
