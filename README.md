@@ -136,7 +136,7 @@ Language
 package whilelang
 
 object Language {
-  sealed trait Statement { def execute() = Exec.execute(this) }
+  sealed trait Statement { def execute() = Semantics.execute(this) }
   case object Skip extends Statement
   case class If(condition: Bool, `then`: Statement, `else`: Statement) extends Statement
   case class Write(exp: Expression) extends Statement
@@ -146,7 +146,7 @@ object Language {
   case class Attrib(id: String, exp: Expression) extends Statement
   case class Program(statements: List[Statement]) extends Statement
 
-  sealed trait Expression { def value() = Exec.value(this) }
+  sealed trait Expression { def value() = Semantics.value(this) }
   case object Read extends Expression
   case class Id(id: String) extends Expression
   case class Integer(exp: Int) extends Expression
@@ -154,7 +154,7 @@ object Language {
   case class ExpSub(lhs: Expression, rhs: Expression) extends Expression
   case class ExpMult(lhs: Expression, rhs: Expression) extends Expression
 
-  sealed trait Bool { def value() = Exec.value(this) }
+  sealed trait Bool { def value() = Semantics.value(this) }
   case class Boole(b: Boolean) extends Bool
   case class ExpEqual(lhs: Expression, rhs: Expression) extends Bool
   case class ExpLessOrEqualThan(lhs: Expression, rhs: Expression) extends Bool
@@ -162,7 +162,7 @@ object Language {
   case class And(lhs: Bool, rhs: Bool) extends Bool
 }
 
-private[this] object Exec {
+private[this] object Semantics {
   import Language._
   val memory = scala.collection.mutable.Map[String, Int]()
   def execute(a: Statement): Unit = a match {
