@@ -1,5 +1,13 @@
 # Translating Whilelang to Scala
 
+168 lines of code:
+
+ - Grammar (32 lines)
+ - Parser Rules (84 lines)
+ - Main (14 lines)
+ - Antlr2Scala (13 lines)
+ - Walker (25 lines)
+
 ## Parser Rules
 ````scala
 package whilelang.compiler
