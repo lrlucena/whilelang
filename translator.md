@@ -1,6 +1,6 @@
-Translating to Scala
+# Translating Whilelang to Scala
 
-Parser Rules
+## Parser Rules
 ````scala
 package whilelang.compiler
 
@@ -89,8 +89,7 @@ class Compiler extends WhilelangBaseListener with Antlr2Scala {
 
 ````
 
-Main
-
+## Main
 
 ````scala
 package whilelang.compiler
@@ -109,8 +108,8 @@ object Main extends App {
 }
 ````
 
+## Antlr2Scala
 
-Antlr2Scala
 ````scala
 package whilelang.compiler
 
