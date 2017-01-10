@@ -9,52 +9,36 @@ A small programming language created with ANTLR and Scala.
   <thead>
     <tr>
       <td></td>
-
       <th>Interpreter</th>
-
       <th>Translator</th>
     </tr>
     </thead>
     <tbody>
     <tr>
       <th>Grammar</th>
-
-<td colspan="2" align="center"><a href="#grammar">Grammar</a> (32 lines)</td>
+      <td colspan="2" align="center"><a href="#grammar">Grammar</a> (32 lines)</td>
     </tr>
-
     <tr>
       <th>Parser Rules</th>
-
       <td align="center"></td>
-
       <td align="center"></td>
     </tr>
-
     <tr>
       <th>Main</th>
-
       <td align="center"></td>
-
       <td align="center"></td>
     </tr>
-
     <tr>
       <th>Antrl2Scala</th>
-
-      <td colspan="2" align="center">Antr2Scala</td>
+      <td colspan="2" align="center"><a href="#antlr2scala">Antr2Scala (13 lines)</a></td>
     </tr>
-
     <tr>
       <th>Walker</th>
-
       <td colspan="2" align="center"></td>
     </tr>
-
     <tr>
       <th>Total</th>
-
       <td align="center" align="center"></td>
-
       <td></td>
     </tr>
   </tbody>
