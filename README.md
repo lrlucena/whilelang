@@ -20,13 +20,13 @@ A small programming language created with ANTLR and Scala.
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td align="center"></td>
-      <td align="center"></td>
+      <td align="center"><a href="#grammar">Listener</a><br><a href="#grammar">Abstract Syntax ans Semantics</a></td>
+      <td align="center"><a href="#grammar">Translator</a></td>
     </tr>
     <tr>
       <th>Main</th>
-      <td align="center"></td>
-      <td align="center"></td>
+      <td align="center"><a href="#grammar">Main</a></td>
+      <td align="center"><a href="#grammar">Main</a></td>
     </tr>
     <tr>
       <th>Antrl2Scala</th>
