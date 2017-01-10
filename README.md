@@ -25,8 +25,8 @@ A small programming language created with ANTLR and Scala.
     </tr>
     <tr>
       <th>Main</th>
-      <td align="center"><a href="#grammar">Main</a></td>
-      <td align="center"><a href="#grammar">Main</a></td>
+      <td align="center"><a href="#grammar">Main</a> (14 lines)</td>
+      <td align="center"><a href="#grammar">Main</a> (14 lines)</td>
     </tr>
     <tr>
       <th>Antrl2Scala</th>
