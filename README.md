@@ -24,7 +24,7 @@ Two implementations:
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td><a href="#grammar">Listener</a> (74 lines)<br><a href="#grammar">Abstract Syntax ans Semantics</a> (63 lines)</td>
+      <td><a href="#grammar">Listener</a> (74 lines)<br><a href="#grammar">Abstract Syntax and Semantics</a> (63 lines)</td>
       <td><a href="#grammar">Compiler</a> (87 lines)</td>
     </tr>
     <tr>
