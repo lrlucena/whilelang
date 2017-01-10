@@ -20,8 +20,8 @@ A small programming language created with ANTLR and Scala.
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td align="center"><a href="#grammar">Listener</a><br><a href="#grammar">Abstract Syntax ans Semantics</a></td>
-      <td align="center"><a href="#grammar">Translator</a></td>
+      <td align="center"><a href="#grammar">Listener</a> (74 lines)<br><a href="#grammar">Abstract Syntax ans Semantics</a> (63 lines)</td>
+      <td align="center"><a href="#grammar">Compiler</a> (87 lines)</td>
     </tr>
     <tr>
       <th>Main</th>
