@@ -3,7 +3,62 @@ While language
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1705795c5f74b9289b6f4c942dd5911)](https://www.codacy.com/app/leonardo-lucena/whilelang?utm_source=github.com&utm_medium=referral&utm_content=lrlucena/whilelang&utm_campaign=badger)
 
-  A small programming language created with ANTLR and Scala
+A small programming language created with ANTLR and Scala. 
+
+<table width="100%">
+  <thead>
+    <tr>
+      <td></td>
+
+      <th>Interpreter</th>
+
+      <th>Translator</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <th>Grammar</th>
+
+<td colspan="2" align="center"><a href="#grammar">Grammar</a> (32 lines)</td>
+    </tr>
+
+    <tr>
+      <th>Parser Rules</th>
+
+      <td align="center"></td>
+
+      <td align="center"></td>
+    </tr>
+
+    <tr>
+      <th>Main</th>
+
+      <td align="center"></td>
+
+      <td align="center"></td>
+    </tr>
+
+    <tr>
+      <th>Antrl2Scala</th>
+
+      <td colspan="2" align="center">Antr2Scala</td>
+    </tr>
+
+    <tr>
+      <th>Walker</th>
+
+      <td colspan="2" align="center"></td>
+    </tr>
+
+    <tr>
+      <th>Total</th>
+
+      <td align="center" align="center"></td>
+
+      <td></td>
+    </tr>
+  </tbody>
+</table>
 
 Only 210 lines of code:
 
