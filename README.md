@@ -30,11 +30,11 @@ A small programming language created with ANTLR and Scala.
     </tr>
     <tr>
       <th>Antrl2Scala</th>
-      <td colspan="2" align="center"><a href="#antlr2scala">Antr2Scala (13 lines)</a></td>
+      <td colspan="2" align="center"><a href="#antlr2scala">Antr2Scala</a> (13 lines)</td>
     </tr>
     <tr>
       <th>Walker</th>
-      <td colspan="2" align="center"></td>
+      <td colspan="2" align="center"><a href="#walker">Walker</a> (25 lines)</td>
     </tr>
     <tr>
       <th>Total</th>
