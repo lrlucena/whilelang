@@ -33,12 +33,8 @@ Two implementations:
       <td><a href="#grammar">Main</a> (14 lines)</td>
     </tr>
     <tr>
-      <th>Antrl2Scala</th>
-      <td colspan="2" align="center"><a href="#antlr2scala">Antr2Scala</a> (13 lines)</td>
-    </tr>
-    <tr>
-      <th>Walker</th>
-      <td colspan="2" align="center"><a href="#walker">Walker</a> (25 lines)</td>
+      <th>Utility Classes</th>
+      <td colspan="2" align="center"><a href="#antlr2scala">Antr2Scala</a> (13 lines)<br> <a href="#walker">Walker</a> (25 lines)</td>
     </tr>
     <tr>
       <th>Total</th>
@@ -284,7 +280,9 @@ object Main extends App {
 }
 ````
 
-## Walker
+## Utility Classes
+
+### Walker
 
 ````scala
 package whilelang.parser
@@ -314,7 +312,7 @@ object Walker {
 }
 ````
 
-## Antlr2Scala
+### Antlr2Scala
 
 ````scala
 package whilelang.parser
