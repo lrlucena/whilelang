@@ -3,7 +3,11 @@ While language
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1705795c5f74b9289b6f4c942dd5911)](https://www.codacy.com/app/leonardo-lucena/whilelang?utm_source=github.com&utm_medium=referral&utm_content=lrlucena/whilelang&utm_campaign=badger)
 
-A small programming language created with ANTLR and Scala. 
+> A small programming language created with ANTLR and Scala. 
+
+Two implementations:
+  - Interpretor
+  - Translator to Scala
 
 <table width="100%">
   <thead>
@@ -43,14 +47,6 @@ A small programming language created with ANTLR and Scala.
     </tr>
   </tbody>
 </table>
-
-Only 210 lines of code:
-
-  - [Grammar](#grammar) (32 lines)
-  - [Parser Rules](#listener) (74 lines)
-  - [Language (Abstract Syntax and Semantics)](#language) (60 lines) 
-  - [Main](#main) (21 lines)
-  - [Antlr2Scala](#antlr2scala) (13 lines)
 
 Grammar
 ====
