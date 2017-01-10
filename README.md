@@ -1,5 +1,4 @@
-While language
-=====
+# While language
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1705795c5f74b9289b6f4c942dd5911)](https://www.codacy.com/app/leonardo-lucena/whilelang?utm_source=github.com&utm_medium=referral&utm_content=lrlucena/whilelang&utm_campaign=badger)
 
@@ -49,8 +48,7 @@ Two implementations:
   </tbody>
 </table>
 
-Grammar
-====
+## Grammar
 
 ```antlr
 grammar Whilelang;
@@ -87,11 +85,9 @@ Text: '"' .*? '"';
 Space: [ \t\n\r] -> skip;
 ```
 
-Interpreter
-====
+## Interpreter
 
-Listener
-===
+### Listener
 
 ````scala
 package whilelang
@@ -202,8 +198,7 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
 }
 ````
 
-Language
-===
+### Language
 
 ````scala
 package whilelang.interpreter
@@ -269,9 +264,74 @@ object Language {
   }
 }
 ````
+## Main
 
-Compiler
-====
+````scala
+package whilelang.interpreter
+
+import java.io.FileNotFoundException
+import scala.util.{ Failure, Success, Try }
+import whilelang.parser.Walker
+
+object Main extends App {
+  implicit val listener = new MyListener()  // new Compiler()
+  Try(io.Source.fromFile(args(0)).getLines.mkString("\n")).flatMap(Walker.walk) match {
+    case Success(_)                        => listener.program.execute  // println(listener.program)
+    case Failure(e: FileNotFoundException) => println("File not found")
+    case Failure(e)                        => println("Error: " + e.getLocalizedMessage)
+  }
+}
+````
+
+## Walker
+
+````scala
+package whilelang.parser
+
+import scala.util.Try
+import org.antlr.v4.runtime.{ ANTLRInputStream, BaseErrorListener, CommonTokenStream, RecognitionException, Recognizer }
+import org.antlr.v4.runtime.misc.ParseCancellationException
+import org.antlr.v4.runtime.tree.ParseTreeWalker
+
+object ThrowingErrorListener extends BaseErrorListener {
+  override def syntaxError(r: Recognizer[_, _], off: Any, line: Int, col: Int, msg: String, e: RecognitionException) =
+    throw new ParseCancellationException(s"line $line:$col $msg")
+}
+
+object Walker {
+  def walk(source: String)(implicit listener: WhilelangListener) = Try {
+    val lexer = new WhilelangLexer(new ANTLRInputStream(source)) {
+      removeErrorListeners()
+      addErrorListener(ThrowingErrorListener)
+    }
+    val parser = new WhilelangParser(new CommonTokenStream(lexer)) {
+      removeErrorListeners()
+      addErrorListener(ThrowingErrorListener)
+    }
+    new ParseTreeWalker().walk(listener, parser.program)
+  }
+}
+````
+
+## Antlr2Scala
+
+````scala
+package whilelang.parser
+
+import org.antlr.v4.runtime.tree.{ ParseTree, ParseTreeProperty }
+
+trait Antlr2Scala[T] {
+  protected val values = new ParseTreeProperty[T]
+  protected implicit class tree2scala(tree: ParseTree) {
+    def apply(i: Int) = tree.getChild(i)
+    def text = tree.getText
+    def value[E]: E = values.get(tree).asInstanceOf[E]
+    def value_=(v: T) = values.put(tree, v)
+  }
+}
+````
+
+##Compiler
 
 ````scala
 package whilelang.compiler
@@ -360,72 +420,5 @@ class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
         case op  => op
       }
     } ${ctx.expression(1).value}"
-}
-````
-
-Main
-====
-````scala
-package whilelang.interpreter
-
-import java.io.FileNotFoundException
-import scala.util.{ Failure, Success, Try }
-import whilelang.parser.Walker
-
-object Main extends App {
-  implicit val listener = new MyListener()  // new Compiler()
-  Try(io.Source.fromFile(args(0)).getLines.mkString("\n")).flatMap(Walker.walk) match {
-    case Success(_)                        => listener.program.execute  // println(listener.program)
-    case Failure(e: FileNotFoundException) => println("File not found")
-    case Failure(e)                        => println("Error: " + e.getLocalizedMessage)
-  }
-}
-````
-
-Walker
-====
-````scala
-package whilelang.parser
-
-import scala.util.Try
-import org.antlr.v4.runtime.{ ANTLRInputStream, BaseErrorListener, CommonTokenStream, RecognitionException, Recognizer }
-import org.antlr.v4.runtime.misc.ParseCancellationException
-import org.antlr.v4.runtime.tree.ParseTreeWalker
-
-object ThrowingErrorListener extends BaseErrorListener {
-  override def syntaxError(r: Recognizer[_, _], off: Any, line: Int, col: Int, msg: String, e: RecognitionException) =
-    throw new ParseCancellationException(s"line $line:$col $msg")
-}
-
-object Walker {
-  def walk(source: String)(implicit listener: WhilelangListener) = Try {
-    val lexer = new WhilelangLexer(new ANTLRInputStream(source)) {
-      removeErrorListeners()
-      addErrorListener(ThrowingErrorListener)
-    }
-    val parser = new WhilelangParser(new CommonTokenStream(lexer)) {
-      removeErrorListeners()
-      addErrorListener(ThrowingErrorListener)
-    }
-    new ParseTreeWalker().walk(listener, parser.program)
-  }
-}
-````
-
-Antlr2Scala
-====
-````scala
-package whilelang.parser
-
-import org.antlr.v4.runtime.tree.{ ParseTree, ParseTreeProperty }
-
-trait Antlr2Scala[T] {
-  protected val values = new ParseTreeProperty[T]
-  protected implicit class tree2scala(tree: ParseTree) {
-    def apply(i: Int) = tree.getChild(i)
-    def text = tree.getText
-    def value[E]: E = values.get(tree).asInstanceOf[E]
-    def value_=(v: T) = values.put(tree, v)
-  }
 }
 ````
