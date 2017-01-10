@@ -6,7 +6,7 @@
 
 Two implementations:
 
-  - Interpretor
+  - Interpreter
   - Translator to Scala
 
 <table width="100%">
