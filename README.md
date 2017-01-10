@@ -80,6 +80,7 @@ ID: ('a'..'z')+;
 Text: '"' .*? '"';
 Space: [ \t\n\r] -> skip;
 ```
+---
 
 ## Interpreter
 
@@ -280,6 +281,8 @@ object Main extends App {
 }
 ````
 
+---
+
 ## Utility Classes
 
 ### Walker
@@ -329,6 +332,8 @@ trait Antlr2Scala[T] {
   }
 }
 ````
+
+---
 
 ## Compiler
 
