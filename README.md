@@ -20,13 +20,13 @@ A small programming language created with ANTLR and Scala.
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td align="center"><a href="#grammar">Listener</a> (74 lines)<br><a href="#grammar">Abstract Syntax ans Semantics</a> (63 lines)</td>
-      <td align="center"><a href="#grammar">Compiler</a> (87 lines)</td>
+      <td><a href="#grammar">Listener</a> (74 lines)<br><a href="#grammar">Abstract Syntax ans Semantics</a> (63 lines)</td>
+      <td><a href="#grammar">Compiler</a> (87 lines)</td>
     </tr>
     <tr>
       <th>Main</th>
-      <td align="center"><a href="#grammar">Main</a> (14 lines)</td>
-      <td align="center"><a href="#grammar">Main</a> (14 lines)</td>
+      <td><a href="#grammar">Main</a> (14 lines)</td>
+      <td><a href="#grammar">Main</a> (14 lines)</td>
     </tr>
     <tr>
       <th>Antrl2Scala</th>
@@ -38,8 +38,8 @@ A small programming language created with ANTLR and Scala.
     </tr>
     <tr>
       <th>Total</th>
-      <td align="center" align="center"></td>
-      <td></td>
+      <td>221 lines</td>
+      <td>171 lines</td>
     </tr>
   </tbody>
 </table>
