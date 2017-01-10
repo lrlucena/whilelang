@@ -9,12 +9,12 @@ Two implementations:
   - Interpreter
   - Translator to Scala
 
-<table width="100%">
+<table>
   <thead>
     <tr>
       <td></td>
-      <th>Interpreter</th>
-      <th>Translator</th>
+      <th >Interpreter</th>
+      <th >Translator</th>
     </tr>
     </thead>
     <tbody>
