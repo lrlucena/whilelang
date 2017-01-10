@@ -1,22 +1,14 @@
-package whilelang
+package whilelang.interpreter
 
-import org.antlr.v4.runtime.{ ANTLRInputStream, CommonTokenStream }
-import org.antlr.v4.runtime.tree.ParseTreeWalker
-import scala.io.Source
-import scala.util.{ Try, Success, Failure }
+import java.io.FileNotFoundException
+import scala.util.{ Failure, Success, Try }
+import whilelang.parser.Walker
 
 object Main extends App {
-  def parse(source: String) = {
-    val parser = new WhilelangParser(new CommonTokenStream(new WhilelangLexer(new ANTLRInputStream(source))))
-    val walker = new ParseTreeWalker()
-    val listener = new MyListener()
-    walker.walk(listener, parser.program)
-    listener.program
-  }
-
-  val sourceCode = Try(Source.fromFile(args(0)).getLines.mkString("\n"))
-  sourceCode match {
-    case Success(code) => parse(code).execute
-    case Failure(_)    => println("File not found")
+  implicit val listener = new MyListener()
+  Try(io.Source.fromFile(args(0)).getLines.mkString("\n")).flatMap(Walker.walk) match {
+    case Success(_)                        => listener.program.execute
+    case Failure(e: FileNotFoundException) => println("File not found")
+    case Failure(e)                        => println("Error: " + e.getLocalizedMessage)
   }
 }
