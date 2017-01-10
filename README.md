@@ -87,38 +87,6 @@ Space: [ \t\n\r] -> skip;
 ### Listener
 
 ````scala
-package whilelang
-
-import whilelang.{ WhilelangParser => C }
-import whilelang.Language2._
-import scala.collection.JavaConverters._
-
-class MyListener extends WhilelangBaseListener with Antlr2Scala {
-  var _program: Statement = _
-  def program = _program
-
-  override def exitProgram(ctx: C.ProgramContext) =
-    _program = Program(ctx.seqStatement.value[List[Statement]])
-
-  override def exitSeqStatement(ctx: C.SeqStatementContext) =
-    ctx.value = ctx.statement().asScala.toList.map { _.value[Statement] }
-
-  override def exitAttrib(ctx: C.AttribContext) =
-    ctx.value = Attrib(ctx.ID.text, ctx.expression.value)
-
-  override def exitSkip(ctx: C.SkipContext) =
-    ctx.value = Skip
-
-  override def exitIf(ctx: C.IfContext) =
-    ctx.value = If(ctx.bool.value, ctx.statement(0).value, ctx.statement(1).value)
-
-  override def exitWhile(ctx: C.WhileContext) =
-    ctx.value = While(ctx.bool.value, ctx.statement.value)
-
-  override def exitPrint(ctx: C.PrintContext) =
-    ctx.value = Print(ctx.Text.text.drop(1).dropRight(1))
-
-  override def exitWrite(ctx: C.WriteContext) =
 package whilelang.interpreter
 
 import scala.collection.JavaConverters.asScalaBufferConverter
