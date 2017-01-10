@@ -264,6 +264,7 @@ object Language {
   }
 }
 ````
+
 ## Main
 
 ````scala
@@ -331,7 +332,7 @@ trait Antlr2Scala[T] {
 }
 ````
 
-##Compiler
+## Compiler
 
 ````scala
 package whilelang.compiler
