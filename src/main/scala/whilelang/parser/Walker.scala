@@ -1,7 +1,7 @@
 package whilelang.parser
 
 import scala.util.Try
-import org.antlr.v4.runtime.{ ANTLRInputStream, BaseErrorListener, CommonTokenStream, RecognitionException, Recognizer }
+import org.antlr.v4.runtime.{BaseErrorListener, CharStream, CharStreams, CommonTokenStream, RecognitionException, Recognizer }
 import org.antlr.v4.runtime.misc.ParseCancellationException
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 
@@ -12,7 +12,7 @@ object ThrowingErrorListener extends BaseErrorListener {
 
 object Walker {
   def walk(source: String)(implicit listener: WhilelangListener) = Try {
-    val lexer = new WhilelangLexer(new ANTLRInputStream(source)) {
+    val lexer = new WhilelangLexer(CharStreams.fromString(source)) {
       removeErrorListeners()
       addErrorListener(ThrowingErrorListener)
     }
