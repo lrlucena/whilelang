@@ -3,9 +3,9 @@ package whilelang.interpreter
 object Language {
   sealed trait Statement { def execute() = Semantics.execute(this) }
   case object Skip extends Statement
-  case class If(condition: Bool, `then`: Statement, `else`: Statement) extends Statement
+  case class If(condition: Bool, thenSmt: Statement, elseSmt: Statement) extends Statement
   case class Write(exp: Expression) extends Statement
-  case class While(condition: Bool, `do`: Statement) extends Statement
+  case class While(condition: Bool, doSmt: Statement) extends Statement
   case class Print(text: String) extends Statement
   case class SeqStatement(statements: List[Statement]) extends Statement
   case class Attrib(id: String, exp: Expression) extends Statement
@@ -30,14 +30,14 @@ object Language {
     val memory = scala.collection.mutable.Map[String, Int]()
 
     def execute(stmt: Statement): Unit = stmt match {
-      case If(cond, thn, els)  => if (cond.value) thn.execute else els.execute
-      case Write(exp)          => println(exp.value)
-      case While(cond, d)      => while (cond.value) { d.execute }
-      case Print(text)         => println(text)
-      case SeqStatement(stmts) => stmts.foreach { _.execute }
-      case Attrib(id, exp)     => memory += id -> exp.value
-      case Program(seq)        => seq.execute
-      case Skip | _            =>
+      case If(cond, thenSmt, elseSmt)  => if (cond.value) thenSmt.execute else elseSmt.execute
+      case Write(exp)                  => println(exp.value)
+      case While(cond, doSmt)          => while (cond.value) { doSmt.execute }
+      case Print(text)                 => println(text)
+      case SeqStatement(stmts)         => stmts.foreach { _.execute }
+      case Attrib(id, exp)             => memory += id -> exp.value
+      case Program(seq)                => seq.execute
+      case Skip | _                    =>
     }
 
     def value(exp: Expression): Int = exp match {
