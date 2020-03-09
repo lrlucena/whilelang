@@ -7,7 +7,7 @@
 Two implementations:
 
   - Interpreter
-  - Translator to Scala
+  - Translator
 
 <table>
   <thead>
