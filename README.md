@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1705795c5f74b9289b6f4c942dd5911)](https://www.codacy.com/app/leonardo-lucena/whilelang?utm_source=github.com&utm_medium=referral&utm_content=lrlucena/whilelang&utm_campaign=badger)
 
-> A small programming language created with ANTLR and Scala. 
+> A small programming language created with ANTLR and Scala.
 
 Two implementations:
 
@@ -24,7 +24,7 @@ Two implementations:
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td><a href="#grammar">Listener</a> (74 lines)<br><a href="#grammar">Abstract Syntax and Semantics</a> (63 lines)</td>
+      <td><a href="#grammar">Listener</a> (74 lines)<br><a href="#grammar">Abstract Syntax and Semantics</a> (62 lines)</td>
       <td><a href="#grammar">Compiler</a> (87 lines)</td>
     </tr>
     <tr>
@@ -38,7 +38,7 @@ Two implementations:
     </tr>
     <tr>
       <th>Total</th>
-      <td>221 lines</td>
+      <td>220 lines</td>
       <td>171 lines</td>
     </tr>
   </tbody>
@@ -89,73 +89,73 @@ Space: [ \t\n\r] -> skip;
 ````scala
 package whilelang.interpreter
 
-import scala.collection.JavaConverters.asScalaBufferConverter
+import scala.jdk.CollectionConverters._
 import whilelang.interpreter.Language._
-import whilelang.parser.{ Antlr2Scala, WhilelangBaseListener, WhilelangParser => C }
+import whilelang.parser.{ Antlr2Scala, WhilelangBaseListener}
+import whilelang.parser.WhilelangParser._
 
 class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
-  var _program: Program = _
-  def program = _program
+  var program: Program = _
 
-  override def exitProgram(ctx: C.ProgramContext) =
-    _program = Program(ctx.seqStatement.value)
+  override def exitProgram(ctx: ProgramContext) =
+    program = Program(ctx.seqStatement.value)
 
-  override def exitSeqStatement(ctx: C.SeqStatementContext) =
-    ctx.value = SeqStatement(ctx.statement().asScala.toList.map { _.value[Statement] })
+  override def exitSeqStatement(ctx: SeqStatementContext) =
+    ctx.value = SeqStatement(ctx.statement.asScala.toList.map { _.value[Statement] })
 
-  override def exitAttrib(ctx: C.AttribContext) =
+  override def exitAttrib(ctx: AttribContext) =
     ctx.value = Attrib(ctx.ID.text, ctx.expression.value)
 
-  override def exitSkip(ctx: C.SkipContext) =
+  override def exitSkip(ctx: SkipContext) =
     ctx.value = Skip
 
-  override def exitIf(ctx: C.IfContext) =
+  override def exitIf(ctx: IfContext) =
     ctx.value = If(ctx.bool.value, ctx.statement(0).value, ctx.statement(1).value)
 
-  override def exitWhile(ctx: C.WhileContext) =
+  override def exitWhile(ctx: WhileContext) =
     ctx.value = While(ctx.bool.value, ctx.statement.value)
 
-  override def exitPrint(ctx: C.PrintContext) =
+  override def exitPrint(ctx: PrintContext) =
     ctx.value = Print(ctx.Text.text.drop(1).dropRight(1))
 
-  override def exitWrite(ctx: C.WriteContext) =
+  override def exitWrite(ctx: WriteContext) =
     ctx.value = Write(ctx.expression.value[Expression])
 
-  override def exitBlock(ctx: C.BlockContext) =
+  override def exitBlock(ctx: BlockContext) =
     ctx.value = ctx.seqStatement.value
 
-  override def exitRead(ctx: C.ReadContext) =
+  override def exitRead(ctx: ReadContext) =
     ctx.value = Read
 
-  override def exitId(ctx: C.IdContext) =
+  override def exitId(ctx: IdContext) =
     ctx.value = Id(ctx.ID.text)
 
-  override def exitExpParen(ctx: C.ExpParenContext) =
+  override def exitExpParen(ctx: ExpParenContext) =
     ctx.value = ctx.expression.value
 
-  override def exitInt(ctx: C.IntContext) =
+  override def exitInt(ctx: IntContext) =
     ctx.value = Integer(ctx.text.toInt)
 
-  override def exitBinOp(ctx: C.BinOpContext) =
+  override def exitBinOp(ctx: BinOpContext) =
     ctx.value = (ctx(1).text match {
       case "*"     => ExpMult
       case "-"     => ExpSub
       case "+" | _ => ExpSum
     })(ctx.expression(0).value, ctx.expression(1).value)
 
-  override def exitNot(ctx: C.NotContext) =
+  override def exitNot(ctx: NotContext) =
     ctx.value = Not(ctx.bool.value)
 
-  override def exitBoolean(ctx: C.BooleanContext) =
+  override def exitBoolean(ctx: BooleanContext) =
     ctx.value = Boole(ctx.text == "true")
 
-  override def exitAnd(ctx: C.AndContext) =
+  override def exitAnd(ctx: AndContext) =
     ctx.value = And(ctx.bool(0).value, ctx.bool(1).value)
 
-  override def exitBoolParen(ctx: C.BoolParenContext) =
+  override def exitBoolParen(ctx: BoolParenContext) =
     ctx.value = ctx.bool.value
 
-  override def exitRelOp(ctx: C.RelOpContext) =
+  override def exitRelOp(ctx: RelOpContext) =
     ctx.value = (ctx(1).text match {
       case "="      => ExpEqual
       case "<=" | _ => ExpLessOrEqualThan
@@ -171,9 +171,9 @@ package whilelang.interpreter
 object Language {
   sealed trait Statement { def execute() = Semantics.execute(this) }
   case object Skip extends Statement
-  case class If(condition: Bool, `then`: Statement, `else`: Statement) extends Statement
+  case class If(condition: Bool, thenSmt: Statement, elseSmt: Statement) extends Statement
   case class Write(exp: Expression) extends Statement
-  case class While(condition: Bool, `do`: Statement) extends Statement
+  case class While(condition: Bool, doSmt: Statement) extends Statement
   case class Print(text: String) extends Statement
   case class SeqStatement(statements: List[Statement]) extends Statement
   case class Attrib(id: String, exp: Expression) extends Statement
@@ -198,14 +198,14 @@ object Language {
     val memory = scala.collection.mutable.Map[String, Int]()
 
     def execute(stmt: Statement): Unit = stmt match {
-      case If(cond, thn, els)  => if (cond.value) thn.execute else els.execute
-      case Write(exp)          => println(exp.value)
-      case While(cond, d)      => while (cond.value) { d.execute }
-      case Print(text)         => println(text)
-      case SeqStatement(stmts) => stmts.foreach { _.execute }
-      case Attrib(id, exp)     => memory += id -> exp.value
-      case Program(seq)        => seq.execute
-      case Skip | _            =>
+      case If(cond, thenSmt, elseSmt)  => if (cond.value) thenSmt.execute else elseSmt.execute
+      case Write(exp)                  => println(exp.value)
+      case While(cond, doSmt)          => while (cond.value) { doSmt.execute }
+      case Print(text)                 => println(text)
+      case SeqStatement(stmts)         => stmts.foreach { _.execute }
+      case Attrib(id, exp)             => memory += id -> exp.value
+      case Program(seq)                => seq.execute
+      case Skip | _                    =>
     }
 
     def value(exp: Expression): Int = exp match {
@@ -240,9 +240,9 @@ import scala.util.{ Failure, Success, Try }
 import whilelang.parser.Walker
 
 object Main extends App {
-  implicit val listener = new MyListener()  // new Compiler()
+  implicit val listener = new MyListener()
   Try(io.Source.fromFile(args(0)).getLines.mkString("\n")).flatMap(Walker.walk) match {
-    case Success(_)                        => listener.program.execute  // println(listener.program)
+    case Success(_)                        => listener.program.execute
     case Failure(e: FileNotFoundException) => println("File not found")
     case Failure(e)                        => println("Error: " + e.getLocalizedMessage)
   }
@@ -259,7 +259,7 @@ object Main extends App {
 package whilelang.parser
 
 import scala.util.Try
-import org.antlr.v4.runtime.{ ANTLRInputStream, BaseErrorListener, CommonTokenStream, RecognitionException, Recognizer }
+import org.antlr.v4.runtime.{BaseErrorListener, CharStream, CharStreams, CommonTokenStream, RecognitionException, Recognizer }
 import org.antlr.v4.runtime.misc.ParseCancellationException
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 
@@ -270,7 +270,7 @@ object ThrowingErrorListener extends BaseErrorListener {
 
 object Walker {
   def walk(source: String)(implicit listener: WhilelangListener) = Try {
-    val lexer = new WhilelangLexer(new ANTLRInputStream(source)) {
+    val lexer = new WhilelangLexer(CharStreams.fromString(source)) {
       removeErrorListeners()
       addErrorListener(ThrowingErrorListener)
     }
@@ -308,84 +308,84 @@ trait Antlr2Scala[T] {
 ````scala
 package whilelang.compiler
 
-import scala.collection.JavaConverters.asScalaBufferConverter
-import whilelang.parser.{ Antlr2Scala, WhilelangBaseListener, WhilelangParser => C }
+import scala.jdk.CollectionConverters._
+import whilelang.parser.{ Antlr2Scala, WhilelangBaseListener}
+import whilelang.parser.WhilelangParser._
 import scala.collection.immutable.StringOps
 
 class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
-  var _program: String = _
-  def program = _program
-  val ids = collection.mutable.Set("i")
+  var program: String = _
+  val ids = collection.mutable.Set[String]()
 
-  override def exitProgram(ctx: C.ProgramContext) =
-    _program = s"""object Main extends App {
-                  |  var ${ids.mkString("", ", ", "")} = 0;
-                  |  ${ctx.seqStatement.value}
-                  |}""".stripMargin
+  override def exitProgram(ctx: ProgramContext) =
+    program = s"""object Main extends App {
+                 |  var ${ids.mkString("", ", ", "")} = 0;
+                 |  ${ctx.seqStatement.value}
+                 |}""".stripMargin
 
-  override def exitSeqStatement(ctx: C.SeqStatementContext) =
+  override def exitSeqStatement(ctx: SeqStatementContext) =
     ctx.value = ctx.statement().asScala
       .map(b => b.value[String]).mkString("\n")
       .replaceAll("\n", "\n  ")
 
-  override def exitAttrib(ctx: C.AttribContext) = {
+  override def exitAttrib(ctx: AttribContext) = {
     val id = ctx.ID.text
     ids += id
     ctx.value = s"$id = ${ctx.expression.value};"
   }
 
-  override def exitSkip(ctx: C.SkipContext) =
+  override def exitSkip(ctx: SkipContext) =
     ctx.value = "()"
 
-  override def exitIf(ctx: C.IfContext) =
+  override def exitIf(ctx: IfContext) =
     ctx.value = s"""if (${ctx.bool.value}) {
                    |  ${ctx.statement(0).value}
                    |} else {
                    |  ${ctx.statement(1).value}
                    |}""".stripMargin
 
-  override def exitWhile(ctx: C.WhileContext) =
+  override def exitWhile(ctx: WhileContext) =
     ctx.value = s"""while(${ctx.bool.value}) {
                    |  ${ctx.statement.value}
                    |}""".stripMargin
 
-  override def exitPrint(ctx: C.PrintContext) =
+  override def exitPrint(ctx: PrintContext) =
     ctx.value = s"println(${ctx.Text.text});"
 
-  override def exitWrite(ctx: C.WriteContext) =
+  override def exitWrite(ctx: WriteContext) =
     ctx.value = s"println(${ctx.expression.value});"
 
-  override def exitBlock(ctx: C.BlockContext) =
+  override def exitBlock(ctx: BlockContext) =
     ctx.value = ctx.seqStatement.value
 
-  override def exitRead(ctx: C.ReadContext) =
+  override def exitRead(ctx: ReadContext) =
     ctx.value = "readInt()"
 
-  override def exitId(ctx: C.IdContext) =
+  override def exitId(ctx: IdContext) =
     ctx.value = s"${ctx.ID.text}"
 
-  override def exitExpParen(ctx: C.ExpParenContext) =
+  override def exitExpParen(ctx: ExpParenContext) =
     ctx.value = ctx.expression.value
 
-  override def exitInt(ctx: C.IntContext) =
+  override def exitInt(ctx: IntContext) =
     ctx.value = s"${ctx.text.toInt}"
 
-  override def exitBinOp(ctx: C.BinOpContext) =
+  override def exitBinOp(ctx: BinOpContext) =
     ctx.value = s"${ctx.expression(0).value} ${ctx(1).text} ${ctx.expression(1).value}"
 
-  override def exitNot(ctx: C.NotContext) =
+  override def exitNot(ctx: NotContext) =
     ctx.value = s"!(${ctx.bool.value})"
 
-  override def exitBoolean(ctx: C.BooleanContext) =
+  override def exitBoolean(ctx: BooleanContext) =
     ctx.value = s"""${ctx.text == "true"}"""
 
-  override def exitAnd(ctx: C.AndContext) =
+  override def exitAnd(ctx: AndContext) =
     ctx.value = s"(${ctx.bool(0).value} && ${ctx.bool(1).value})"
 
-  override def exitBoolParen(ctx: C.BoolParenContext) =
+  override def exitBoolParen(ctx: BoolParenContext) =
     ctx.value = s"(${ctx.bool.value})"
 
-  override def exitRelOp(ctx: C.RelOpContext) =
+  override def exitRelOp(ctx: RelOpContext) =
     ctx.value = s"${ctx.expression(0).value} ${
       ctx(1).text match {
         case "=" => "=="

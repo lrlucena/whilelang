@@ -1,5 +1,6 @@
 ThisBuild / scalaVersion := "2.13.1"
 ThisBuild / organization := "com.github.lrlucena"
+ThisBuild / version := "1.0"
 
 enablePlugins(Antlr4Plugin)
 
@@ -7,7 +8,6 @@ mainClass in (Compile, packageBin) := Some("whilelang.interpreter.Main")
 
 scalacOptions in Compile ++= Seq("-deprecation")
 
-//assemblyOutputPath in assembly := file("./whilelang.jar")
 lazy val hello = (project in file(".")).settings(name := "WhileLang" )
 
 libraryDependencies ++= Seq(

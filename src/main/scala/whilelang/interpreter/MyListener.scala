@@ -6,11 +6,10 @@ import whilelang.parser.{ Antlr2Scala, WhilelangBaseListener}
 import whilelang.parser.WhilelangParser._
 
 class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
-  var _program: Program = _
-  def program = _program
+  var program: Program = _
 
   override def exitProgram(ctx: ProgramContext) =
-    _program = Program(ctx.seqStatement.value)
+    program = Program(ctx.seqStatement.value)
 
   override def exitSeqStatement(ctx: SeqStatementContext) =
     ctx.value = SeqStatement(ctx.statement.asScala.toList.map { _.value[Statement] })

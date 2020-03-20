@@ -6,15 +6,14 @@ import whilelang.parser.WhilelangParser._
 import scala.collection.immutable.StringOps
 
 class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
-  var _program: String = _
-  def program = _program
-  val ids = collection.mutable.Set("i")
+  var program: String = _
+  val ids = collection.mutable.Set[String]()
 
   override def exitProgram(ctx: ProgramContext) =
-    _program = s"""object Main extends App {
-                  |  var ${ids.mkString("", ", ", "")} = 0;
-                  |  ${ctx.seqStatement.value}
-                  |}""".stripMargin
+    program = s"""object Main extends App {
+                 |  ${if (ids.nonEmpty) s"var ${ids.mkString(", ")} = 0" else ""}
+                 |  ${ctx.seqStatement.value}
+                 |}""".stripMargin
 
   override def exitSeqStatement(ctx: SeqStatementContext) =
     ctx.value = ctx.statement().asScala
