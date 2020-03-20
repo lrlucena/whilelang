@@ -8,7 +8,7 @@ import whilelang.parser.WhilelangParser._
 class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
   var program: Program = _
 
-  override def exitProgram(ctx: ProgramContext) =
+  override def exitProgram(ctx: ProgramContext) = 
     program = Program(ctx.seqStatement.value)
 
   override def exitSeqStatement(ctx: SeqStatementContext) =

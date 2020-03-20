@@ -32,5 +32,4 @@ bool: ('true'|'false')                                 # boolean
 INT: ('0'..'9')+ ;
 ID: ('a'..'z')+;
 Text: '"' .*? '"';
-
 Space: [ \t\n\r] -> skip;
