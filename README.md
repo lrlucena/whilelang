@@ -8,8 +8,8 @@ This is a programming language with only one loop instruction (while) and a sing
 The goal is to show that with a few lines of code it is possible to implement a programming language.
 
 The language is implemented in two ways:
- - as an interpreter
- - as a transpiler (compiler) for the Scala language.
+ - as an [interpreter](interpreter.md)
+ - as a [transpiler](transpiler.md) (compiler) for the Scala language.
 
 <table>
   <thead>
@@ -26,19 +26,19 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td><a href="#grammar">Listener</a> (74 lines)<br>
-          <a href="#grammar">Abstract Syntax(28 lines)<br>
-          <a href="#grammar">Semantics</a> (36 lines)</td>
-      <td><a href="#grammar">Compiler</a> (87 lines)</td>
+      <td><a href="interpreter.md#listener">Listener</a> (74 lines)<br>
+          <a href="interpreter.md#syntax">Abstract Syntax(28 lines)<br>
+          <a href="interpreter.md#semantics">Semantics</a> (36 lines)</td>
+      <td><a href="transpiler.md#compiler">Compiler</a> (87 lines)</td>
     </tr>
     <tr>
       <th>Main</th>
-      <td><a href="#grammar">Main</a> (14 lines)</td>
-      <td><a href="#grammar">Main</a> (14 lines)</td>
+      <td><a href="interpreter.md#main">Main</a> (14 lines)</td>
+      <td><a href="transpiler.md#main">Main</a> (14 lines)</td>
     </tr>
     <tr>
       <th>Utility Classes</th>
-      <td colspan="2" align="center"><a href="#antlr2scala">Antr2Scala</a> (13 lines)<br> <a href="#walker">Walker</a> (25 lines)</td>
+      <td colspan="2" align="center"><a href="interpreter#antlr2scala">Antr2Scala</a> (13 lines)<br> <a href="interpreter#walker">Walker</a> (25 lines)</td>
     </tr>
     <tr>
       <th>Total</th>
@@ -52,11 +52,12 @@ The language is implemented in two ways:
 ## Examples
 Here are some code examples:
 
-Hello
+Hello World
 ````ruby
 print "Hello World"
 ````
 
+Sum of two numbers
 ````ruby
 print "Enter the first number:";
 a := read;
@@ -67,6 +68,7 @@ print "The sum is:";
 write sum
 ````
 
+Fibonacci Sequence
 ````ruby
 print "Fibonacci Sequence";
 a := 0;
