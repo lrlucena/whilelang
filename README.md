@@ -26,10 +26,10 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td><a href="interpreter.md#listener">Listener</a> (74 lines)<br>
-          <a href="interpreter.md#syntax">Abstract Syntax(28 lines)<br>
+      <td><a href="interpreter.md#parser-rules">Listener</a> (74 lines)<br>
+          <a href="interpreter.md#abstract-syntax">Abstract Syntax(28 lines)<br>
           <a href="interpreter.md#semantics">Semantics</a> (36 lines)</td>
-      <td><a href="transpiler.md#compiler">Compiler</a> (87 lines)</td>
+      <td><a href="transpiler.md#parser-rules">Compiler</a> (87 lines)</td>
     </tr>
     <tr>
       <th>Main</th>
@@ -38,7 +38,7 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Utility Classes</th>
-      <td colspan="2" align="center"><a href="interpreter#antlr2scala">Antr2Scala</a> (13 lines)<br> <a href="interpreter#walker">Walker</a> (25 lines)</td>
+      <td colspan="2" align="center"><a href="interpreter.md#antlr2scala">Antr2Scala</a> (13 lines)<br> <a href="interpreter.md#walker">Walker</a> (25 lines)</td>
     </tr>
     <tr>
       <th>Total</th>
