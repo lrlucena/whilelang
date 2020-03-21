@@ -15,8 +15,8 @@ The language is implemented in two ways:
   <thead>
     <tr>
       <td></td>
-      <th >Interpreter</th>
-      <th >Compiler (Transpiler)</th>
+      <th>Interpreter</th>
+      <th>Compiler (Transpiler)</th>
     </tr>
     </thead>
     <tbody>
@@ -27,7 +27,7 @@ The language is implemented in two ways:
     <tr>
       <th>Parser Rules</th>
       <td><a href="interpreter.md#parser-rules">Listener</a> (74 lines)<br>
-          <a href="interpreter.md#abstract-syntax">Abstract Syntax(28 lines)<br>
+       <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (28 lines)<br>
           <a href="interpreter.md#semantics">Semantics</a> (36 lines)</td>
       <td><a href="transpiler.md#parser-rules">Compiler</a> (87 lines)</td>
     </tr>
