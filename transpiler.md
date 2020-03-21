@@ -2,6 +2,94 @@
 
 Transpiler from Whilelang to Scala.
 
+````shell
+$ sbt
+
+# To run the transpiler
+sbt> runMain whilelang.compiler.Main sum.while
+````
+
+<table>
+ <thead><tr><th>Program</th><th>Whilelang</th><th>Scala</th></tr></thead> 
+<tbody>
+<tr>
+<td>Hello World</td>
+<td>
+<pre lang="ruby">
+print "Hello World"
+</pre>
+</td>
+<td>
+<pre lang="scala">
+object Main extends App {
+  println("Hello World");
+}
+</pre>
+</td>
+</tr>
+
+<tr>
+<td>Sum of numbers</td>
+<td>
+<pre lang="ruby">
+print "Enter the first number:";
+a := read;
+print "Enter the second number:";
+b := read;
+sum := a + b;
+print "The sum is:";
+write sum
+</pre>
+</td>
+<td>
+<pre lang="scala">
+object Main extends App {
+  var a, b, sum = 0;
+  println("Enter the first number:");
+  a = readInt();
+  println("Enter the second number:");
+  b = readInt();
+  sum = a + b;
+  println("The sum is:");
+  println(sum);
+}
+</pre>
+</td>
+</tr>
+
+<tr>
+<td>Fibonacci Sequence</td>
+<td>
+<pre lang="ruby">
+print "Fibonacci Sequence";
+a := 0;
+b := 1;
+while b <= 1000000 do {
+  write b;
+  b := a + b;
+  a := b - a
+}
+</pre>
+</td>
+<td>
+<pre lang="scala">
+object Main extends App {
+  var a, b = 0;
+  println("Fibonacci Sequence");
+  a = 0;
+  b = 1;
+  while(b <= 1000000) {
+    println(b);
+    b = a + b;
+    a = b - a;
+  }
+}
+</pre>
+</td>
+</tr>
+
+</tbody></table>
+
 
 175 lines of code:
 
