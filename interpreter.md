@@ -1,5 +1,11 @@
 # Interpreter
 
+````shell
+$ sbt
+
+# To run the interpreter
+sbt> runMain whilelang.interpreter.Main sum.while
+````
 
 226 lines of code:
 
