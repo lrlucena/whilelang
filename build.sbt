@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "2.13.1"
+ThisBuild / scalaVersion := "2.13.2"
 ThisBuild / organization := "com.github.lrlucena"
 ThisBuild / version := "1.0"
 
@@ -12,8 +12,8 @@ lazy val hello = (project in file(".")).settings(name := "WhileLang" )
 
 libraryDependencies ++= Seq(
      "org.antlr" % "antlr4" % "4.8-1",
-     "org.scala-lang" % "scala-library" % "2.13.1" ,
-     "org.scala-lang" % "scala-reflect" % "2.13.1"
+     "org.scala-lang" % "scala-library" % "2.13.2" ,
+     "org.scala-lang" % "scala-reflect" % "2.13.2"
 )
 
 antlr4Version in Antlr4 := "4.8-1"
