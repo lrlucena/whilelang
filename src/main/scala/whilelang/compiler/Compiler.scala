@@ -1,16 +1,17 @@
 package whilelang.compiler
 
 import scala.jdk.CollectionConverters._
+import scala.collection.immutable.StringOps
+import scala.language.implicitConversions
 import whilelang.parser.{ Antlr2Scala, WhilelangBaseListener}
 import whilelang.parser.WhilelangParser._
-import scala.collection.immutable.StringOps
 
 class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
   var program: String = _
   val ids = collection.mutable.Set[String]()
 
   override def exitProgram(ctx: ProgramContext) =
-    program = s"""object Main extends App {
+    program = s"""@main def main() = {
                  |  ${if (ids.nonEmpty) s"var ${ids.mkString(", ")} = 0" else ""}
                  |  ${ctx.seqStatement.value}
                  |}""".stripMargin
@@ -20,11 +21,10 @@ class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
       .map(b => b.value[String]).mkString("\n")
       .replaceAll("\n", "\n  ")
 
-  override def exitAttrib(ctx: AttribContext) = {
+  override def exitAttrib(ctx: AttribContext) =
     val id = ctx.ID.text
     ids += id
     ctx.value = s"$id = ${ctx.expression.value};"
-  }
 
   override def exitSkip(ctx: SkipContext) =
     ctx.value = "()"
@@ -79,9 +79,8 @@ class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
 
   override def exitRelOp(ctx: RelOpContext) =
     ctx.value = s"${ctx.expression(0).value} ${
-      ctx(1).text match {
+      ctx(1).text match
         case "=" => "=="
         case op  => op
-      }
     } ${ctx.expression(1).value}"
 }

@@ -4,20 +4,20 @@
 $ sbt
 
 # To run the interpreter
-sbt> runMain whilelang.interpreter.Main sum.while
+sbt> runMain whilelang.interpreter.main sum.while
 ````
 
-226 lines of code:
+221 lines of code:
 
  - Grammar (36 lines)
- - Parser Rules (74 lines)
+ - Parser Rules (73 lines)
  - Abstract Syntax (28 lines)
- - Semantics (36 lines)
+ - Semantics (33 lines)
  - Main (14 lines)
 
 
- - Antlr2Scala (13 lines)
- - Walker (25 lines)
+ - Antlr2Scala (14 lines)
+ - Walker (23 lines)
 
  ## Grammar
 
@@ -66,8 +66,9 @@ sbt> runMain whilelang.interpreter.Main sum.while
 package whilelang.interpreter
 
 import scala.jdk.CollectionConverters._
+import scala.language.implicitConversions
 import whilelang.interpreter.Language._
-import whilelang.parser.{ Antlr2Scala, WhilelangBaseListener}
+import whilelang.parser.{Antlr2Scala, WhilelangBaseListener}
 import whilelang.parser.WhilelangParser._
 
 class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
@@ -113,11 +114,10 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
     ctx.value = Integer(ctx.text.toInt)
 
   override def exitBinOp(ctx: BinOpContext) =
-    ctx.value = (ctx(1).text match {
-      case "*"     => ExpMult
-      case "-"     => ExpSub
-      case "+" | _ => ExpSum
-    })(ctx.expression(0).value, ctx.expression(1).value)
+    ctx.value = ctx(1).text match
+      case "*"     => ExpMult(ctx(0).value, ctx(2).value)
+      case "-"     => ExpSub(ctx(0).value, ctx(2).value)
+      case "+" | _ => ExpSum(ctx(0).value, ctx(2).value)
 
   override def exitNot(ctx: NotContext) =
     ctx.value = Not(ctx.bool.value)
@@ -126,16 +126,15 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
     ctx.value = Boole(ctx.text == "true")
 
   override def exitAnd(ctx: AndContext) =
-    ctx.value = And(ctx.bool(0).value, ctx.bool(1).value)
+    ctx.value = And(ctx(0).value, ctx(2).value)
 
   override def exitBoolParen(ctx: BoolParenContext) =
     ctx.value = ctx.bool.value
 
   override def exitRelOp(ctx: RelOpContext) =
-    ctx.value = (ctx(1).text match {
-      case "="      => ExpEqual
-      case "<=" | _ => ExpLessOrEqualThan
-    })(ctx.expression(0).value, ctx.expression(1).value)
+    ctx.value = ctx(1).text match
+      case "="      => ExpEqual(ctx.expression(0).value, ctx.expression(1).value)
+      case "<=" | _ => ExpLessOrEqualThan(ctx.expression(0).value, ctx.expression(1).value)
 }
 ````
 
@@ -179,35 +178,32 @@ import Language._
 object Semantics {
   val memory = scala.collection.mutable.Map[String, Int]()
 
-  def execute(stmt: Statement): Unit = stmt match {
-    case If(cond, thenSmt, elseSmt) => if (cond.value) thenSmt.execute else elseSmt.execute
+  def execute(stmt: Statement): Unit = stmt match
+    case If(cond, thenSmt, elseSmt) => if (cond.value) thenSmt.execute() else elseSmt.execute()
     case Write(exp)                 => println(exp.value)
-    case While(cond, doSmt)         => while (cond.value) { doSmt.execute }
+    case While(cond, doSmt)         => while (cond.value) { doSmt.execute() }
     case Print(text)                => println(text)
-    case SeqStatement(stmts)        => stmts.foreach { _.execute }
+    case SeqStatement(stmts)        => stmts.foreach { _.execute() }
     case Attrib(id, exp)            => memory += id -> exp.value
-    case Program(seq)               => seq.execute
+    case Program(seq)               => seq.execute()
     case Skip | _                   =>
-  }
 
-  def value(exp: Expression): Int = exp match {
-    case Read              => io.StdIn.readInt
+  def value(exp: Expression): Int = exp match
+    case Read              => io.StdIn.readInt()
     case Id(id)            => memory.getOrElseUpdate(id, 0)
     case Integer(value)    => value
     case ExpSum(lhs, rhs)  => lhs.value + rhs.value
     case ExpSub(lhs, rhs)  => lhs.value - rhs.value
     case ExpMult(lhs, rhs) => lhs.value * rhs.value
-    case _                 => 0
-  }
+    case null | _          => 0
 
-  def value(a: Bool): Boolean = a match {
+  def value(a: Bool): Boolean = a match
     case Boole(b)                     => b
     case ExpEqual(lhs, rhs)           => lhs.value == rhs.value
     case ExpLessOrEqualThan(lhs, rhs) => lhs.value <= rhs.value
     case Not(b)                       => !b.value
     case And(lhs, rhs)                => lhs.value && rhs.value
-    case _                            => true
-  }
+    case null | _                     => true
 }
 ````
 
@@ -230,14 +226,12 @@ object ThrowingErrorListener extends BaseErrorListener {
 
 object Walker {
   def walk(source: String)(implicit listener: WhilelangListener) = Try {
-    val lexer = new WhilelangLexer(CharStreams.fromString(source)) {
-      removeErrorListeners()
-      addErrorListener(ThrowingErrorListener)
-    }
-    val parser = new WhilelangParser(new CommonTokenStream(lexer)) {
-      removeErrorListeners()
-      addErrorListener(ThrowingErrorListener)
-    }
+    val addListener = (r: Recognizer[_, _]) =>
+      r.removeErrorListeners()
+      r.addErrorListener(ThrowingErrorListener)
+    val lexer = new WhilelangLexer(CharStreams.fromString(source)) { addListener(this) }
+    val parser = new WhilelangParser(new CommonTokenStream(lexer)) { addListener(this) }
+
     new ParseTreeWalker().walk(listener, parser.program)
   }
 }
@@ -250,8 +244,9 @@ package whilelang.parser
 import org.antlr.v4.runtime.tree.{ ParseTree, ParseTreeProperty }
 
 trait Antlr2Scala[T] {
-  protected val values = new ParseTreeProperty[T]
-  protected implicit class tree2scala(tree: ParseTree) {
+  private[Antlr2Scala] val values = new ParseTreeProperty[T]
+  given Conversion[ParseTree, Tree2Scala] = Tree2Scala(_)
+  private[Antlr2Scala] case class Tree2Scala(tree: ParseTree) {
     def apply(i: Int) = tree.getChild(i)
     def text = tree.getText
     def value[E]: E = values.get(tree).asInstanceOf[E]

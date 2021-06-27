@@ -1,22 +1,20 @@
-ThisBuild / scalaVersion := "2.13.4"
+ThisBuild / scalaVersion := "3.0.0"
 ThisBuild / organization := "com.github.lrlucena"
 ThisBuild / version := "1.0"
 
 enablePlugins(Antlr4Plugin)
 
-mainClass in (Compile, packageBin) := Some("whilelang.interpreter.Main")
+Compile / packageBin / mainClass := Some("whilelang.interpreter.Main")
 
-scalacOptions in Compile ++= Seq("-deprecation")
+Compile / scalacOptions ++= Seq("-deprecation")
 
 lazy val hello = (project in file(".")).settings(name := "WhileLang" )
 
 libraryDependencies ++= Seq(
-     "org.antlr" % "antlr4" % "4.9.1",
-     "org.scala-lang" % "scala-library" % "2.13.4" ,
-     "org.scala-lang" % "scala-reflect" % "2.13.4"
+     "org.antlr" % "antlr4" % "4.9.2"
 )
 
-antlr4Version in Antlr4 := "4.9.1"
-antlr4PackageName in Antlr4 := Some("whilelang.parser")
-antlr4GenListener in Antlr4 := true
-antlr4GenVisitor in Antlr4 := false
+Antlr4 / antlr4Version:= "4.9.2"
+Antlr4 / antlr4PackageName := Some("whilelang.parser")
+Antlr4 / antlr4GenListener := true
+Antlr4 / antlr4GenVisitor := false

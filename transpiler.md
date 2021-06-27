@@ -10,7 +10,7 @@ sbt> runMain whilelang.compiler.Main sum.while
 ````
 
 <table>
- <thead><tr><th>Program</th><th>Whilelang</th><th>Scala</th></tr></thead> 
+ <thead><tr><th>Program</th><th>Whilelang</th><th>Scala</th></tr></thead>
 <tbody>
 <tr>
 <td>Hello World</td>
@@ -91,15 +91,15 @@ object Main extends App {
 </tbody></table>
 
 
-175 lines of code:
+173 lines of code:
 
  - Grammar (36 lines)
- - Parser Rules (87 lines)
+ - Parser Rules (86 lines)
  - Main (14 lines)
 
 
- - Antlr2Scala (13 lines)
- - Walker (25 lines)
+ - Antlr2Scala (14 lines)
+ - Walker (23 lines)
 
  ## Grammar
 
@@ -147,16 +147,17 @@ object Main extends App {
 package whilelang.compiler
 
 import scala.jdk.CollectionConverters._
+import scala.collection.immutable.StringOps
+import scala.language.implicitConversions
 import whilelang.parser.{ Antlr2Scala, WhilelangBaseListener}
 import whilelang.parser.WhilelangParser._
-import scala.collection.immutable.StringOps
 
 class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
   var program: String = _
   val ids = collection.mutable.Set[String]()
 
   override def exitProgram(ctx: ProgramContext) =
-    program = s"""object Main extends App {
+    program = s"""@main def main() = {
                  |  ${if (ids.nonEmpty) s"var ${ids.mkString(", ")} = 0" else ""}
                  |  ${ctx.seqStatement.value}
                  |}""".stripMargin
@@ -166,11 +167,10 @@ class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
       .map(b => b.value[String]).mkString("\n")
       .replaceAll("\n", "\n  ")
 
-  override def exitAttrib(ctx: AttribContext) = {
+  override def exitAttrib(ctx: AttribContext) =
     val id = ctx.ID.text
     ids += id
     ctx.value = s"$id = ${ctx.expression.value};"
-  }
 
   override def exitSkip(ctx: SkipContext) =
     ctx.value = "()"
@@ -225,10 +225,9 @@ class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
 
   override def exitRelOp(ctx: RelOpContext) =
     ctx.value = s"${ctx.expression(0).value} ${
-      ctx(1).text match {
+      ctx(1).text match
         case "=" => "=="
         case op  => op
-      }
     } ${ctx.expression(1).value}"
 }
 ````
@@ -240,16 +239,16 @@ package whilelang.compiler
 
 import java.io.FileNotFoundException
 import scala.util.{ Failure, Success, Try }
-import whilelang.parser.Walker.walk
+import whilelang.parser.Walker
 
-object Main extends App {
-  implicit val listener = new Compiler()
-  Try(io.Source.fromFile(args(0)).getLines.mkString("\n")).flatMap(walk) match {
+implicit val listener: Compiler = new Compiler()
+
+@main def main(file: String) =
+  val sourceCode = Try { io.Source.fromFile(file).getLines().mkString("\n")}
+  sourceCode.flatMap(Walker.walk) match
     case Success(_)                        => println(listener.program)
     case Failure(e: FileNotFoundException) => println("File not found")
     case Failure(e)                        => println("Error: " + e.printStackTrace())
-  }
-}
 ````
 
 ## Auxiliary Classes
@@ -270,14 +269,12 @@ object ThrowingErrorListener extends BaseErrorListener {
 
 object Walker {
   def walk(source: String)(implicit listener: WhilelangListener) = Try {
-    val lexer = new WhilelangLexer(CharStreams.fromString(source)) {
-      removeErrorListeners()
-      addErrorListener(ThrowingErrorListener)
-    }
-    val parser = new WhilelangParser(new CommonTokenStream(lexer)) {
-      removeErrorListeners()
-      addErrorListener(ThrowingErrorListener)
-    }
+    val addListener = (r: Recognizer[_, _]) =>
+      r.removeErrorListeners()
+      r.addErrorListener(ThrowingErrorListener)
+    val lexer = new WhilelangLexer(CharStreams.fromString(source)) { addListener(this) }
+    val parser = new WhilelangParser(new CommonTokenStream(lexer)) { addListener(this) }
+
     new ParseTreeWalker().walk(listener, parser.program)
   }
 }
@@ -290,8 +287,9 @@ package whilelang.parser
 import org.antlr.v4.runtime.tree.{ ParseTree, ParseTreeProperty }
 
 trait Antlr2Scala[T] {
-  protected val values = new ParseTreeProperty[T]
-  protected implicit class tree2scala(tree: ParseTree) {
+  private[Antlr2Scala] val values = new ParseTreeProperty[T]
+  given Conversion[ParseTree, Tree2Scala] = Tree2Scala(_)
+  private[Antlr2Scala] case class Tree2Scala(tree: ParseTree) {
     def apply(i: Int) = tree.getChild(i)
     def text = tree.getText
     def value[E]: E = values.get(tree).asInstanceOf[E]

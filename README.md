@@ -26,10 +26,10 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td><a href="interpreter.md#parser-rules">Listener</a> (74 lines)<br>
+      <td><a href="interpreter.md#parser-rules">Listener</a> (73 lines)<br>
        <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (28 lines)<br>
-          <a href="interpreter.md#semantics">Semantics</a> (36 lines)</td>
-      <td><a href="transpiler.md#parser-rules">Compiler</a> (87 lines)</td>
+          <a href="interpreter.md#semantics">Semantics</a> (33 lines)</td>
+      <td><a href="transpiler.md#parser-rules">Compiler</a> (86 lines)</td>
     </tr>
     <tr>
       <th>Main</th>
@@ -38,12 +38,12 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Utility Classes</th>
-      <td colspan="2" align="center"><a href="interpreter.md#antlr2scala">Antr2Scala</a> (13 lines)<br> <a href="interpreter.md#walker">Walker</a> (25 lines)</td>
+      <td colspan="2" align="center"><a href="interpreter.md#antlr2scala">Antr2Scala</a> (14 lines)<br> <a href="interpreter.md#walker">Walker</a> (23 lines)</td>
     </tr>
     <tr>
       <th>Total</th>
-      <td>226 lines</td>
-      <td>175 lines</td>
+      <td>221 lines</td>
+      <td>173 lines</td>
     </tr>
   </tbody>
 </table>
@@ -134,8 +134,8 @@ sbt> clean
 sbt> compile
 
 # To run the interpreter
-sbt> runMain whilelang.interpreter.Main sum.while
+sbt> runMain whilelang.interpreter.main sum.while
 
 # To run the transpiler
-sbt> runMain whilelang.compiler.Main sum.while
+sbt> runMain whilelang.compiler.main sum.while
 ````
