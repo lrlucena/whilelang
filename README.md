@@ -126,7 +126,7 @@ Space: [ \t\n\r] -> skip;
 
 ## Compiling & Running
 
-To compile you need to install [sbt](https://www.scala-sbt.org/). The easiest way is to use [sdkman] (https://sdkman.io/install) (Linux) or [Scoop] (https://scoop.sh/) (Windows).
+To compile you need to install [sbt](https://www.scala-sbt.org/). The easiest way is to use [Sdkman](https://sdkman.io/install) (Linux) or [Scoop](https://scoop.sh/) (Windows).
 
 ````shell
 $ sbt
