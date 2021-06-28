@@ -6,7 +6,7 @@ import whilelang.interpreter.Language._
 import whilelang.parser.{Antlr2Scala, WhilelangBaseListener}
 import whilelang.parser.WhilelangParser._
 
-class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
+class MyListener extends WhilelangBaseListener with Antlr2Scala[Any]:
   var program: Program = _
 
   override def exitProgram(ctx: ProgramContext) =
@@ -70,4 +70,3 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
     ctx.value = ctx(1).text match
       case "="      => ExpEqual(ctx.expression(0).value, ctx.expression(1).value)
       case "<=" | _ => ExpLessOrEqualThan(ctx.expression(0).value, ctx.expression(1).value)
-}

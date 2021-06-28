@@ -6,7 +6,7 @@ import scala.language.implicitConversions
 import whilelang.parser.{ Antlr2Scala, WhilelangBaseListener}
 import whilelang.parser.WhilelangParser._
 
-class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
+class Compiler extends WhilelangBaseListener with Antlr2Scala[String]:
   var program: String = _
   val ids = collection.mutable.Set[String]()
 
@@ -18,8 +18,8 @@ class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
 
   override def exitSeqStatement(ctx: SeqStatementContext) =
     ctx.value = ctx.statement().asScala
-      .map(b => b.value[String]).mkString("\n")
-      .replaceAll("\n", "\n  ")
+      .map(b => b.value[String])
+      .mkString("\n").replaceAll("\n", "\n  ")
 
   override def exitAttrib(ctx: AttribContext) =
     val id = ctx.ID.text
@@ -83,4 +83,3 @@ class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
         case "=" => "=="
         case op  => op
     } ${ctx.expression(1).value}"
-}

@@ -26,24 +26,24 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td><a href="interpreter.md#parser-rules">Listener</a> (73 lines)<br>
-       <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (28 lines)<br>
-          <a href="interpreter.md#semantics">Semantics</a> (33 lines)</td>
-      <td><a href="transpiler.md#parser-rules">Compiler</a> (86 lines)</td>
+      <td><a href="interpreter.md#parser-rules">Listener</a> (72 lines)<br>
+       <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (30 lines)<br>
+          <a href="interpreter.md#semantics">Semantics</a> (32 lines)</td>
+      <td><a href="transpiler.md#parser-rules">Compiler</a> (85 lines)</td>
     </tr>
     <tr>
       <th>Main</th>
-      <td><a href="interpreter.md#main">Main</a> (14 lines)</td>
-      <td><a href="transpiler.md#main">Main</a> (14 lines)</td>
+      <td><a href="interpreter.md#main">Main</a> (12 lines)</td>
+      <td><a href="transpiler.md#main">Main</a> (12 lines)</td>
     </tr>
     <tr>
       <th>Utility Classes</th>
-      <td colspan="2" align="center"><a href="interpreter.md#antlr2scala">Antr2Scala</a> (14 lines)<br> <a href="interpreter.md#walker">Walker</a> (23 lines)</td>
+      <td colspan="2" align="center"><a href="interpreter.md#antlr2scala">Antr2Scala</a> (13 lines)<br> <a href="interpreter.md#walker">Walker</a> (23 lines)</td>
     </tr>
     <tr>
       <th>Total</th>
-      <td>221 lines</td>
-      <td>173 lines</td>
+      <td>218 lines</td>
+      <td>169 lines</td>
     </tr>
   </tbody>
 </table>

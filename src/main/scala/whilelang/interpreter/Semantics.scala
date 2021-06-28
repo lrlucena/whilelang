@@ -1,7 +1,7 @@
 package whilelang.interpreter
 import Language._
 
-object Semantics {
+object Semantics:
   val memory = scala.collection.mutable.Map[String, Int]()
 
   def execute(stmt: Statement): Unit = stmt match
@@ -30,4 +30,3 @@ object Semantics {
     case Not(b)                       => !b.value
     case And(lhs, rhs)                => lhs.value && rhs.value
     case null | _                     => true
-}
