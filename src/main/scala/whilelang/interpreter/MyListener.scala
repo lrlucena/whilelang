@@ -2,9 +2,11 @@ package whilelang.interpreter
 
 import scala.jdk.CollectionConverters._
 import scala.language.implicitConversions
-import whilelang.interpreter.Language._
 import whilelang.parser.{Antlr2Scala, WhilelangBaseListener}
 import whilelang.parser.WhilelangParser._
+import Statement._
+import Expression._
+import Bool._
 
 class MyListener extends WhilelangBaseListener with Antlr2Scala[Any]:
   var program: Program = _

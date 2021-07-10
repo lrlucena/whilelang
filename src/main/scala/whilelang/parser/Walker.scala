@@ -12,12 +12,12 @@ object ThrowingErrorListener extends BaseErrorListener:
 object Walker:
   def sourceCode(file: String) = Try { io.Source.fromFile(file).getLines().mkString("\n") }
 
+  def addListener(r: Recognizer[_, _]) =
+    r.removeErrorListeners()
+    r.addErrorListener(ThrowingErrorListener)
+
   def walk(source: String)(implicit listener: WhilelangListener) = Try {
-    def addListener(r: Recognizer[_, _]) =
-      r.removeErrorListeners()
-      r.addErrorListener(ThrowingErrorListener)
     val lexer = new WhilelangLexer(CharStreams.fromString(source)) { addListener(this) }
     val parser = new WhilelangParser(new CommonTokenStream(lexer)) { addListener(this) }
-
     new ParseTreeWalker().walk(listener, parser.program)
   }

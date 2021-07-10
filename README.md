@@ -26,9 +26,9 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td><a href="interpreter.md#parser-rules">Listener</a> (72 lines)<br>
-       <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (30 lines)<br>
-          <a href="interpreter.md#semantics">Semantics</a> (32 lines)</td>
+      <td><a href="interpreter.md#parser-rules">Listener</a> (74 lines)<br>
+       <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (26 lines)<br>
+          <a href="interpreter.md#semantics">Semantics</a> (34 lines)</td>
       <td><a href="transpiler.md#parser-rules">Compiler</a> (85 lines)</td>
     </tr>
     <tr>

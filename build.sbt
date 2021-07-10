@@ -4,9 +4,11 @@ ThisBuild / version := "1.0"
 
 enablePlugins(Antlr4Plugin)
 
-Compile / packageBin / mainClass := Some("whilelang.interpreter.Main")
+Compile / packageBin / mainClass := Some("whilelang.interpreter.main")
 
 Compile / scalacOptions ++= Seq("-deprecation")
+
+assembly / mainClass :=  Some("whilelang.interpreter.main")
 
 lazy val hello = (project in file(".")).settings(name := "WhileLang" )
 
