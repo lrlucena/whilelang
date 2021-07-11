@@ -1,5 +1,7 @@
 package whilelang.interpreter
 
+import whilelang.parser._
+
 type Memory = collection.mutable.Map[String, Int]
 given Memory = collection.mutable.Map[String, Int]()
 

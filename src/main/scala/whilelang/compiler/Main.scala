@@ -1,12 +1,6 @@
 package whilelang.compiler
 
-import java.io.FileNotFoundException
-import scala.util.{ Failure, Success, Try }
-import whilelang.parser.Walker.{sourceCode, walk}
+import whilelang.parser.Runner
 
-implicit val listener: Compiler = new Compiler()
-
-@main def main(file: String) = sourceCode(file).flatMap(walk) match
-  case Success(_)                        => println(listener.program)
-  case Failure(e: FileNotFoundException) => println("File not found")
-  case Failure(e)                        => println("Error: " + e.printStackTrace())
+@main def main(file: String) =
+  Runner.run(file)(p => println(p.translate))

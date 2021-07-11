@@ -1,4 +1,4 @@
-package whilelang.interpreter
+package whilelang.parser
 
 enum Statement:
   case Skip

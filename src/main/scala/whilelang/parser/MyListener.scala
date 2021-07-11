@@ -1,18 +1,19 @@
-package whilelang.interpreter
+package whilelang.parser
 
 import scala.jdk.CollectionConverters._
 import scala.language.implicitConversions
 import whilelang.parser.{Antlr2Scala, WhilelangBaseListener}
 import whilelang.parser.WhilelangParser._
-import Statement._
-import Expression._
-import Bool._
+import whilelang.parser.Statement._
+import whilelang.parser.Expression._
+import whilelang.parser.Bool._
 
 class MyListener extends WhilelangBaseListener with Antlr2Scala[Any]:
   var program: Program = _
 
   override def exitProgram(ctx: ProgramContext) =
-    program = Program(ctx.seqStatement.value)
+    ctx.value = Program(ctx.seqStatement.value)
+    program = ctx.value
 
   override def exitSeqStatement(ctx: SeqStatementContext) =
     ctx.value = SeqStatement(ctx.statement.asScala.toList.map { _.value[Statement] })
@@ -33,7 +34,7 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any]:
     ctx.value = Print(ctx.Text.text.drop(1).dropRight(1))
 
   override def exitWrite(ctx: WriteContext) =
-    ctx.value = Write(ctx.expression.value[Expression])
+    ctx.value = Write(ctx.expression.value)
 
   override def exitBlock(ctx: BlockContext) =
     ctx.value = ctx.seqStatement.value

@@ -11,10 +11,10 @@ class Compiler extends WhilelangBaseListener with Antlr2Scala[String]:
   val ids = collection.mutable.Set[String]()
 
   override def exitProgram(ctx: ProgramContext) =
-    program = s"""@main def main() = {
-                 |  ${if (ids.nonEmpty) s"var ${ids.mkString(", ")} = 0" else ""}
+    program = s"""@main def main() =
+                 |  ${if ids.nonEmpty then s"var ${ids.mkString(", ")} = 0;" else ""}
                  |  ${ctx.seqStatement.value}
-                 |}""".stripMargin
+                 |""".stripMargin
 
   override def exitSeqStatement(ctx: SeqStatementContext) =
     ctx.value = ctx.statement().asScala
@@ -30,16 +30,16 @@ class Compiler extends WhilelangBaseListener with Antlr2Scala[String]:
     ctx.value = "()"
 
   override def exitIf(ctx: IfContext) =
-    ctx.value = s"""if (${ctx.bool.value}) {
+    ctx.value = s"""if ${ctx.bool.value} then
                    |  ${ctx.statement(0).value}
-                   |} else {
+                   |else
                    |  ${ctx.statement(1).value}
-                   |}""".stripMargin
+                   |""".stripMargin
 
   override def exitWhile(ctx: WhileContext) =
-    ctx.value = s"""while(${ctx.bool.value}) {
+    ctx.value = s"""while ${ctx.bool.value} do
                    |  ${ctx.statement.value}
-                   |}""".stripMargin
+                   |""".stripMargin
 
   override def exitPrint(ctx: PrintContext) =
     ctx.value = s"println(${ctx.Text.text});"
