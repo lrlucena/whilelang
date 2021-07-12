@@ -1,4 +1,4 @@
-package whilelang.parser
+package whilelang.util
 
 import org.antlr.v4.runtime.tree.{ParseTree, ParseTreeProperty}
 

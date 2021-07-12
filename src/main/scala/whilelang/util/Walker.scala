@@ -1,9 +1,10 @@
-package whilelang.parser
+package whilelang.util
 
 import scala.util.Try
 import org.antlr.v4.runtime.{BaseErrorListener, CharStream, CharStreams, CommonTokenStream, RecognitionException, Recognizer }
 import org.antlr.v4.runtime.misc.ParseCancellationException
 import org.antlr.v4.runtime.tree.ParseTreeWalker
+import whilelang.parser._
 import whilelang.interpreter._
 
 object ThrowingErrorListener extends BaseErrorListener:

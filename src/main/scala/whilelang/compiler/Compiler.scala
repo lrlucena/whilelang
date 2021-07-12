@@ -3,8 +3,9 @@ package whilelang.compiler
 import scala.jdk.CollectionConverters._
 import scala.collection.immutable.StringOps
 import scala.language.implicitConversions
-import whilelang.parser.{ Antlr2Scala, WhilelangBaseListener}
+import whilelang.parser.WhilelangBaseListener
 import whilelang.parser.WhilelangParser._
+import whilelang.util.Antlr2Scala
 
 class Compiler extends WhilelangBaseListener with Antlr2Scala[String]:
   var program: String = _

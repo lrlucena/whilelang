@@ -2,11 +2,12 @@ package whilelang.parser
 
 import scala.jdk.CollectionConverters._
 import scala.language.implicitConversions
-import whilelang.parser.{Antlr2Scala, WhilelangBaseListener}
+import whilelang.parser.WhilelangBaseListener
 import whilelang.parser.WhilelangParser._
-import whilelang.parser.Statement._
-import whilelang.parser.Expression._
-import whilelang.parser.Bool._
+import whilelang.util.Antlr2Scala
+import Statement._
+import Expression._
+import Bool._
 
 class MyListener extends WhilelangBaseListener with Antlr2Scala[Any]:
   var program: Program = _
@@ -52,10 +53,11 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any]:
     ctx.value = Integer(ctx.text.toInt)
 
   override def exitBinOp(ctx: BinOpContext) =
+    val (lhs, rhs) = (ctx.expression(0).value, ctx.expression(1).value)
     ctx.value = ctx(1).text match
-      case "*"     => ExpMult(ctx(0).value, ctx(2).value)
-      case "-"     => ExpSub(ctx(0).value, ctx(2).value)
-      case "+" | _ => ExpSum(ctx(0).value, ctx(2).value)
+      case "*"     => ExpMult(lhs, rhs)
+      case "-"     => ExpSub(lhs, rhs)
+      case "+" | _ => ExpSum(lhs, rhs)
 
   override def exitNot(ctx: NotContext) =
     ctx.value = Not(ctx.bool.value)
@@ -64,12 +66,13 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any]:
     ctx.value = Boole(ctx.text == "true")
 
   override def exitAnd(ctx: AndContext) =
-    ctx.value = And(ctx(0).value, ctx(2).value)
+    ctx.value = And(ctx.bool(0).value, ctx.bool(1).value)
 
   override def exitBoolParen(ctx: BoolParenContext) =
     ctx.value = ctx.bool.value
 
   override def exitRelOp(ctx: RelOpContext) =
+    val (lhs, rhs) = (ctx.expression(0).value, ctx.expression(1).value)
     ctx.value = ctx(1).text match
-      case "="      => ExpEqual(ctx.expression(0).value, ctx.expression(1).value)
-      case "<=" | _ => ExpLessOrEqualThan(ctx.expression(0).value, ctx.expression(1).value)
+      case "="      => ExpEqual(lhs, rhs)
+      case "<=" | _ => ExpLessOrEqualThan(lhs, rhs)

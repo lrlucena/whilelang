@@ -14,7 +14,7 @@ The language is implemented in two ways:
 <table>
   <thead>
     <tr>
-      <td></td>
+      <th> </th>
       <th>Interpreter</th>
       <th>Compiler (Transpiler)</th>
     </tr>
@@ -22,28 +22,39 @@ The language is implemented in two ways:
     <tbody>
     <tr>
       <th>Grammar</th>
-      <td colspan="2" align="center"><a href="#grammar">Grammar</a> (36 lines)</td>
+      <td colspan="2" align="center">
+        <a href="#grammar">Grammar</a> (29 lines)
+      </td>
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td><a href="interpreter.md#parser-rules">Listener</a> (74 lines)<br>
-       <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (26 lines)<br>
-          <a href="interpreter.md#semantics">Semantics</a> (34 lines)</td>
-      <td><a href="transpiler.md#parser-rules">Compiler</a> (85 lines)</td>
+      <td colspan="2">
+        <a href="interpreter.md#parser-rules">Listener</a> (57 lines)<br>
+        <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (23 lines)
+      </td>
+    </tr>
+    <tr>
+      <th>Semantics</th>
+      <td><a href="interpreter.md#parser-rules">Semantics</a> (31 lines)</td>
+      <td><a href="interpreter.md#parser-rules">Semantics</a> (31 lines)</td>
     </tr>
     <tr>
       <th>Main</th>
-      <td><a href="interpreter.md#main">Main</a> (12 lines)</td>
-      <td><a href="transpiler.md#main">Main</a> (12 lines)</td>
+      <td><a href="interpreter.md#main">Main</a> (3 lines)</td>
+      <td><a href="transpiler.md#main">Main</a> (3 lines)</td>
     </tr>
     <tr>
       <th>Utility Classes</th>
-      <td colspan="2" align="center"><a href="interpreter.md#antlr2scala">Antr2Scala</a> (13 lines)<br> <a href="interpreter.md#walker">Walker</a> (23 lines)</td>
+      <td colspan="2" align="center">
+      <a href="interpreter.md#antlr2scala">Antr2Scala</a> (10 lines)<br>
+      <a href="interpreter.md#walker">Walker</a> (23 lines)<br>
+      <a href="interpreter.md#walker">Runner</a> (12 lines)
+      </td>
     </tr>
     <tr>
       <th>Total</th>
-      <td>218 lines</td>
-      <td>169 lines</td>
+      <td>188 lines</td>
+      <td>188 lines</td>
     </tr>
   </tbody>
 </table>

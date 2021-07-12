@@ -6,7 +6,9 @@ import whilelang.parser.Bool._
 
 type Ids = collection.mutable.Set[String]
 given Ids = collection.mutable.Set[String]()
-def vars(ids: Ids) = if ids.nonEmpty then s"var ${ids.mkString(", ")} = 0;" else ""
+
+def vars(ids: Ids) =
+  if ids.nonEmpty then s"var ${ids.mkString(", ")} = 0;" else ""
 
 extension(src: Any)(using ids: Ids)
   def translate: String = t

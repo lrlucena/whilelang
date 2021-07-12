@@ -1,10 +1,10 @@
-package whilelang.parser
+package whilelang.util
 
 import java.io.FileNotFoundException
 import scala.util.{ Failure, Success, Try }
-import whilelang.parser.Walker.{sourceCode, walk}
 import whilelang.parser.MyListener
 import whilelang.parser.Statement.Program
+import Walker.{sourceCode, walk}
 
 object Runner:
   given MyListener = new MyListener()
