@@ -15,8 +15,8 @@ The language is implemented in two ways:
   <thead>
     <tr>
       <th> </th>
-      <th>Interpreter</th>
-      <th>Compiler (Transpiler)</th>
+      <th align="center">Interpreter</th>
+      <th align="center">Compiler (Transpiler)</th>
     </tr>
     </thead>
     <tbody>
@@ -28,20 +28,25 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Parser Rules</th>
+<<<<<<< HEAD
       <td colspan="2">
         <a href="interpreter.md#parser-rules">Listener</a> (59 lines)<br>
+=======
+      <td colspan="2" align="center">
+        <a href="interpreter.md#parser-rules">Listener</a> (57 lines)<br>
+>>>>>>> dce209e991f595b2e3c43ca1f11a6eac1dc85d7c
         <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (23 lines)
       </td>
     </tr>
     <tr>
       <th>Semantics</th>
-      <td><a href="interpreter.md#parser-rules">Semantics</a> (31 lines)</td>
-      <td><a href="interpreter.md#parser-rules">Semantics</a> (31 lines)</td>
+      <td align="center"><a href="interpreter.md#parser-rules">Semantics</a> (31 lines)</td>
+      <td align="center"><a href="interpreter.md#parser-rules">Semantics</a> (31 lines)</td>
     </tr>
     <tr>
       <th>Main</th>
-      <td><a href="interpreter.md#main">Main</a> (3 lines)</td>
-      <td><a href="transpiler.md#main">Main</a> (3 lines)</td>
+      <td align="center"><a href="interpreter.md#main">Main</a> (3 lines)</td>
+      <td align="center"><a href="transpiler.md#main">Main</a> (3 lines)</td>
     </tr>
     <tr>
       <th>Utility Classes</th>
@@ -53,8 +58,13 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Total</th>
+<<<<<<< HEAD
       <td>190 lines</td>
       <td>190 lines</td>
+=======
+      <td align="center">188 lines</td>
+      <td align="center">188 lines</td>
+>>>>>>> dce209e991f595b2e3c43ca1f11a6eac1dc85d7c
     </tr>
   </tbody>
 </table>
