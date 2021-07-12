@@ -15,8 +15,8 @@ The language is implemented in two ways:
   <thead>
     <tr>
       <th> </th>
-      <th>Interpreter</th>
-      <th>Compiler (Transpiler)</th>
+      <th align="center">Interpreter</th>
+      <th align="center">Compiler (Transpiler)</th>
     </tr>
     </thead>
     <tbody>
