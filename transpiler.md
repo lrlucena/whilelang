@@ -21,9 +21,8 @@ print "Hello World"
 </td>
 <td>
 <pre lang="scala">
-object Main extends App {
+@main def main() = 
   println("Hello World");
-}
 </pre>
 </td>
 </tr>
@@ -43,7 +42,7 @@ write sum
 </td>
 <td>
 <pre lang="scala">
-object Main extends App {
+@main def main() = 
   var a, b, sum = 0;
   println("Enter the first number:");
   a = readInt();
@@ -52,7 +51,6 @@ object Main extends App {
   sum = a + b;
   println("The sum is:");
   println(sum);
-}
 </pre>
 </td>
 </tr>
@@ -73,17 +71,15 @@ while b <= 1000000 do {
 </td>
 <td>
 <pre lang="scala">
-object Main extends App {
+@main def main() = 
   var a, b = 0;
   println("Fibonacci Sequence");
   a = 0;
   b = 1;
-  while(b <= 1000000) {
+  while b <= 1000000 do
     println(b);
     b = a + b;
     a = b - a;
-  }
-}
 </pre>
 </td>
 </tr>
