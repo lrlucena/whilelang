@@ -53,7 +53,8 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any]:
     ctx.value = Integer(ctx.text.toInt)
 
   override def exitBinOp(ctx: BinOpContext) =
-    val (lhs, rhs) = (ctx.expression(0).value, ctx.expression(1).value)
+    val lhs: Expression = ctx.expression(0).value
+    val rhs: Expression = ctx.expression(1).value
     ctx.value = ctx(1).text match
       case "*"     => ExpMult(lhs, rhs)
       case "-"     => ExpSub(lhs, rhs)
@@ -72,7 +73,8 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any]:
     ctx.value = ctx.bool.value
 
   override def exitRelOp(ctx: RelOpContext) =
-    val (lhs, rhs) = (ctx.expression(0).value, ctx.expression(1).value)
+    val lhs: Expression = ctx.expression(0).value
+    val rhs: Expression = ctx.expression(1).value
     ctx.value = ctx(1).text match
       case "="      => ExpEqual(lhs, rhs)
       case "<=" | _ => ExpLessOrEqualThan(lhs, rhs)

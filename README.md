@@ -29,7 +29,7 @@ The language is implemented in two ways:
     <tr>
       <th>Parser Rules</th>
       <td colspan="2">
-        <a href="interpreter.md#parser-rules">Listener</a> (57 lines)<br>
+        <a href="interpreter.md#parser-rules">Listener</a> (59 lines)<br>
         <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (23 lines)
       </td>
     </tr>
@@ -53,8 +53,8 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Total</th>
-      <td>188 lines</td>
-      <td>188 lines</td>
+      <td>190 lines</td>
+      <td>190 lines</td>
     </tr>
   </tbody>
 </table>
