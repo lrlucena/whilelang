@@ -28,13 +28,8 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Parser Rules</th>
-<<<<<<< HEAD
       <td colspan="2">
         <a href="interpreter.md#parser-rules">Listener</a> (59 lines)<br>
-=======
-      <td colspan="2" align="center">
-        <a href="interpreter.md#parser-rules">Listener</a> (57 lines)<br>
->>>>>>> dce209e991f595b2e3c43ca1f11a6eac1dc85d7c
         <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (23 lines)
       </td>
     </tr>
