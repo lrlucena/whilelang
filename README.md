@@ -53,13 +53,8 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Total</th>
-<<<<<<< HEAD
       <td>190 lines</td>
       <td>190 lines</td>
-=======
-      <td align="center">188 lines</td>
-      <td align="center">188 lines</td>
->>>>>>> dce209e991f595b2e3c43ca1f11a6eac1dc85d7c
     </tr>
   </tbody>
 </table>
