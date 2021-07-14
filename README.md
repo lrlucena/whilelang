@@ -5,7 +5,7 @@
 > A small programming language created with ANTLR and Scala.
 
 This is a programming language with only one loop instruction (while) and a single type (integer).
-The goal is to show that with a few lines of code it is possible to implement a programming language.
+The goal is to show that it is possible to implement a programming language with a only few lines of code.
 
 The language is implemented in two ways:
  - as an [interpreter](interpreter.md)
