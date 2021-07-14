@@ -9,20 +9,21 @@ import whilelang.interpreter._
 
 object ThrowingErrorListener extends BaseErrorListener:
   override def syntaxError(r: Recognizer[_, _], off: Any, line: Int, col: Int, msg: String, e: RecognitionException) =
-    throw new ParseCancellationException(s"line $line:$col $msg")
+    throw ParseCancellationException(s"line $line:$col $msg")
 
 object Walker:
   def sourceCode(file: String): Try[String] = Try {
     io.Source.fromFile(file).getLines().mkString("\n")
   }
 
-  def addListener(r: Recognizer[_, _]) =
+  def addListener(r: Recognizer[_, _]*) = r.map( r =>
     r.removeErrorListeners()
-    r.addErrorListener(ThrowingErrorListener)
+    r.addErrorListener(ThrowingErrorListener))
 
   def walk(source: String)(implicit listener: MyListener): Try[Statement.Program] = Try {
-    val lexer = new WhilelangLexer(CharStreams.fromString(source)) { addListener(this) }
-    val parser = new WhilelangParser(new CommonTokenStream(lexer)) { addListener(this) }
-    new ParseTreeWalker().walk(listener, parser.program)
+    val lexer = WhilelangLexer(CharStreams.fromString(source))
+    val parser = WhilelangParser(CommonTokenStream(lexer))
+    addListener(lexer, parser)
+    ParseTreeWalker().walk(listener, parser.program)
     listener.program
   }

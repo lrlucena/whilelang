@@ -7,7 +7,7 @@ import whilelang.parser.Statement.Program
 import Walker.{sourceCode, walk}
 
 object Runner:
-  given MyListener = new MyListener()
+  given MyListener = MyListener()
 
   def run(file: String)(action: Program => Unit) = sourceCode(file).flatMap(walk) match
     case Success(program)                  => action(program)

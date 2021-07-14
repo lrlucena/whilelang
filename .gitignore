@@ -5,6 +5,8 @@
 .cache
 .history
 .lib/
+.bsp/
+.vscode/
 dist/*
 target/
 lib_managed/
