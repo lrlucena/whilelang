@@ -9,7 +9,7 @@ import Walker.{sourceCode, walk}
 object Runner:
   given MyListener = MyListener()
 
-  def run(file: String)(action: Program => Unit) = sourceCode(file).flatMap(walk) match
+  def run(action: Program => Unit)(file: String) = sourceCode(file).flatMap(walk) match
     case Success(program)                  => action(program)
     case Failure(e: FileNotFoundException) => println("File not found")
     case Failure(e)                        => println("Error: " + e.printStackTrace())

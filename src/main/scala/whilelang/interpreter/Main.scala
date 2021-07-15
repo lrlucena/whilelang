@@ -1,5 +1,7 @@
 package whilelang.interpreter
 
-import whilelang.util.Runner.run
+import whilelang.util.Runner
 
-@main def main(file: String) = run(file)(_.execute)
+def action = Runner.run(program => program.execute)
+
+@main def main(file: String) = action(file)
