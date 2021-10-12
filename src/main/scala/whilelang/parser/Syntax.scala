@@ -20,7 +20,7 @@ enum Expression:
 
 enum Bool:
   case Boole(b: Boolean)
-  case ExpEqual(lhs: Expression, rhs: Expression)
-  case ExpLessOrEqualThan(lhs: Expression, rhs: Expression)
+  case ExpEq(lhs: Expression, rhs: Expression)
+  case ExpLe(lhs: Expression, rhs: Expression)
   case Not(b: Bool)
   case And(lhs: Bool, rhs: Bool)

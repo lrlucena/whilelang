@@ -9,7 +9,7 @@ statement: ID ':=' expression                          # attrib
          | 'if' bool 'then' statement 'else' statement # if
          | 'while' bool 'do' statement                 # while
          | 'print' Text                                # print
-         | 'write' expression                          # write
+         | 'print' expression                          # write
          | '{' seqStatement '}'                        # block
          ;
 

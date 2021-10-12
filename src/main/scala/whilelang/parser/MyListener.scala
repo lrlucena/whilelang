@@ -76,5 +76,5 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any]:
     val lhs: Expression = ctx.expression(0).value
     val rhs: Expression = ctx.expression(1).value
     ctx.value = ctx(1).text match
-      case "="      => ExpEqual(lhs, rhs)
-      case "<=" | _ => ExpLessOrEqualThan(lhs, rhs)
+      case "="      => ExpEq(lhs, rhs)
+      case "<=" | _ => ExpLe(lhs, rhs)
