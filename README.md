@@ -75,8 +75,8 @@ a := read;
 print "Enter the second number:";
 b := read;
 sum := a + b;
-print "The sum is:";
-write sum
+print "The sum is: ";
+print sum
 ````
 
 Fibonacci Sequence
@@ -85,7 +85,7 @@ print "Fibonacci Sequence";
 a := 0;
 b := 1;
 while b <= 1000000 do {
-  write b;
+  print b;
   b := a + b;
   a := b - a
 }

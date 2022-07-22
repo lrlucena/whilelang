@@ -4,4 +4,4 @@ print "Enter the second number:";
 b := read;
 sum := a + b;
 print "The sum is:";
-write sum
+print sum
