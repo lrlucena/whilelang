@@ -1,6 +1,6 @@
-ThisBuild / scalaVersion := "3.1.3"
+ThisBuild / scalaVersion := "3.2.0"
 ThisBuild / organization := "com.github.lrlucena"
-ThisBuild / version := "1.1"
+ThisBuild / version := "1.2"
 
 enablePlugins(Antlr4Plugin)
 
@@ -13,10 +13,10 @@ assembly / mainClass :=  Some("whilelang.interpreter.main")
 lazy val hello = (project in file(".")).settings(name := "WhileLang" )
 
 libraryDependencies ++= Seq(
-     "org.antlr" % "antlr4" % "4.10.1"
+     "org.antlr" % "antlr4" % "4.11.1"
 )
 
-Antlr4 / antlr4Version:= "4.10.1"
+Antlr4 / antlr4Version:= "4.11.1"
 Antlr4 / antlr4PackageName := Some("whilelang.parser")
 Antlr4 / antlr4GenListener := true
 Antlr4 / antlr4GenVisitor := false
