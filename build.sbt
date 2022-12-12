@@ -1,6 +1,6 @@
-ThisBuild / scalaVersion := "3.2.0"
+ThisBuild / scalaVersion := "3.2.1"
 ThisBuild / organization := "com.github.lrlucena"
-ThisBuild / version := "1.2"
+ThisBuild / version := "1.2.1"
 
 enablePlugins(Antlr4Plugin)
 

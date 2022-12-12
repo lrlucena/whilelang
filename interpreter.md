@@ -63,19 +63,23 @@ sbt> runMain whilelang.interpreter.main sum.while
 
 ## Parser Rules
 ````scala
-package whilelang.interpreter
+package whilelang.parser
 
 import scala.jdk.CollectionConverters._
 import scala.language.implicitConversions
-import whilelang.interpreter.Language._
-import whilelang.parser.{Antlr2Scala, WhilelangBaseListener}
+import whilelang.parser.WhilelangBaseListener
 import whilelang.parser.WhilelangParser._
+import whilelang.util.Antlr2Scala
+import Statement._
+import Expression._
+import Bool._
 
-class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
+class MyListener extends WhilelangBaseListener with Antlr2Scala[Any]:
   var program: Program = _
 
   override def exitProgram(ctx: ProgramContext) =
-    program = Program(ctx.seqStatement.value)
+    ctx.value = Program(ctx.seqStatement.value)
+    program = ctx.value
 
   override def exitSeqStatement(ctx: SeqStatementContext) =
     ctx.value = SeqStatement(ctx.statement.asScala.toList.map { _.value[Statement] })
@@ -96,7 +100,7 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
     ctx.value = Print(ctx.Text.text.drop(1).dropRight(1))
 
   override def exitWrite(ctx: WriteContext) =
-    ctx.value = Write(ctx.expression.value[Expression])
+    ctx.value = Write(ctx.expression.value)
 
   override def exitBlock(ctx: BlockContext) =
     ctx.value = ctx.seqStatement.value
@@ -114,10 +118,12 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
     ctx.value = Integer(ctx.text.toInt)
 
   override def exitBinOp(ctx: BinOpContext) =
+    val lhs: Expression = ctx.expression(0).value
+    val rhs: Expression = ctx.expression(1).value
     ctx.value = ctx(1).text match
-      case "*"     => ExpMult(ctx(0).value, ctx(2).value)
-      case "-"     => ExpSub(ctx(0).value, ctx(2).value)
-      case "+" | _ => ExpSum(ctx(0).value, ctx(2).value)
+      case "*"     => ExpMult(lhs, rhs)
+      case "-"     => ExpSub(lhs, rhs)
+      case "+" | _ => ExpSum(lhs, rhs)
 
   override def exitNot(ctx: NotContext) =
     ctx.value = Not(ctx.bool.value)
@@ -126,48 +132,47 @@ class MyListener extends WhilelangBaseListener with Antlr2Scala[Any] {
     ctx.value = Boole(ctx.text == "true")
 
   override def exitAnd(ctx: AndContext) =
-    ctx.value = And(ctx(0).value, ctx(2).value)
+    ctx.value = And(ctx.bool(0).value, ctx.bool(1).value)
 
   override def exitBoolParen(ctx: BoolParenContext) =
     ctx.value = ctx.bool.value
 
   override def exitRelOp(ctx: RelOpContext) =
+    val lhs: Expression = ctx.expression(0).value
+    val rhs: Expression = ctx.expression(1).value
     ctx.value = ctx(1).text match
-      case "="      => ExpEqual(ctx.expression(0).value, ctx.expression(1).value)
-      case "<=" | _ => ExpLessOrEqualThan(ctx.expression(0).value, ctx.expression(1).value)
-}
+      case "="      => ExpEq(lhs, rhs)
+      case "<=" | _ => ExpLe(lhs, rhs)
 ````
 
 ## Abstract Syntax
 ````scala
-package whilelang.interpreter
+package whilelang.parser
 
-object Language {
-  sealed trait Statement { def execute() = Semantics.execute(this) }
-  case object Skip extends Statement
-  case class If(condition: Bool, thenSmt: Statement, elseSmt: Statement) extends Statement
-  case class Write(exp: Expression) extends Statement
-  case class While(condition: Bool, doSmt: Statement) extends Statement
-  case class Print(text: String) extends Statement
-  case class SeqStatement(statements: List[Statement]) extends Statement
-  case class Attrib(id: String, exp: Expression) extends Statement
-  case class Program(statements: SeqStatement) extends Statement
+enum Statement:
+  case Skip
+  case If(condition: Bool, thenSmt: Statement, elseSmt: Statement)
+  case Write(exp: Expression)
+  case While(condition: Bool, doSmt: Statement)
+  case Print(text: String)
+  case SeqStatement(statements: List[Statement])
+  case Attrib(id: String, exp: Expression)
+  case Program(statements: SeqStatement)
 
-  sealed trait Expression { def value() = Semantics.value(this) }
-  case object Read extends Expression
-  case class Id(id: String) extends Expression
-  case class Integer(exp: Int) extends Expression
-  case class ExpSum(lhs: Expression, rhs: Expression) extends Expression
-  case class ExpSub(lhs: Expression, rhs: Expression) extends Expression
-  case class ExpMult(lhs: Expression, rhs: Expression) extends Expression
+enum Expression:
+  case Read
+  case Id(id: String)
+  case Integer(exp: Int)
+  case ExpSum(lhs: Expression, rhs: Expression)
+  case ExpSub(lhs: Expression, rhs: Expression)
+  case ExpMult(lhs: Expression, rhs: Expression)
 
-  sealed trait Bool { def value() = Semantics.value(this) }
-  case class Boole(b: Boolean) extends Bool
-  case class ExpEqual(lhs: Expression, rhs: Expression) extends Bool
-  case class ExpLessOrEqualThan(lhs: Expression, rhs: Expression) extends Bool
-  case class Not(b: Bool) extends Bool
-  case class And(lhs: Bool, rhs: Bool) extends Bool
-}
+enum Bool:
+  case Boole(b: Boolean)
+  case ExpEq(lhs: Expression, rhs: Expression)
+  case ExpLe(lhs: Expression, rhs: Expression)
+  case Not(b: Bool)
+  case And(lhs: Bool, rhs: Bool)
 ````
 
 ## Semantics
@@ -212,45 +217,50 @@ object Semantics {
 
 ### Walker
 ````scala
-package whilelang.parser
+package whilelang.util
 
 import scala.util.Try
 import org.antlr.v4.runtime.{BaseErrorListener, CharStream, CharStreams, CommonTokenStream, RecognitionException, Recognizer }
 import org.antlr.v4.runtime.misc.ParseCancellationException
 import org.antlr.v4.runtime.tree.ParseTreeWalker
+import whilelang.parser._
+import whilelang.interpreter._
 
-object ThrowingErrorListener extends BaseErrorListener {
+object ThrowingErrorListener extends BaseErrorListener:
   override def syntaxError(r: Recognizer[_, _], off: Any, line: Int, col: Int, msg: String, e: RecognitionException) =
-    throw new ParseCancellationException(s"line $line:$col $msg")
-}
+    throw ParseCancellationException(s"line $line:$col $msg")
 
-object Walker {
-  def walk(source: String)(implicit listener: WhilelangListener) = Try {
-    val addListener = (r: Recognizer[_, _]) =>
-      r.removeErrorListeners()
-      r.addErrorListener(ThrowingErrorListener)
-    val lexer = new WhilelangLexer(CharStreams.fromString(source)) { addListener(this) }
-    val parser = new WhilelangParser(new CommonTokenStream(lexer)) { addListener(this) }
-
-    new ParseTreeWalker().walk(listener, parser.program)
+object Walker:
+  def sourceCode(file: String): Try[String] = Try {
+    io.Source.fromFile(file).getLines().mkString("\n")
   }
-}
+
+  def addListener(r: Recognizer[_, _]*) = r.map( r =>
+    r.removeErrorListeners()
+    r.addErrorListener(ThrowingErrorListener))
+
+  def walk(source: String)(implicit listener: MyListener): Try[Statement.Program] = Try {
+    val lexer = WhilelangLexer(CharStreams.fromString(source))
+    val parser = WhilelangParser(CommonTokenStream(lexer))
+    addListener(lexer, parser)
+    ParseTreeWalker().walk(listener, parser.program)
+    listener.program
+  }
 ````
 
 ### Antlr2Scala
 ````scala
-package whilelang.parser
+package whilelang.util
 
-import org.antlr.v4.runtime.tree.{ ParseTree, ParseTreeProperty }
+import org.antlr.v4.runtime.tree.{ParseTree, ParseTreeProperty}
 
-trait Antlr2Scala[T] {
-  private[Antlr2Scala] val values = new ParseTreeProperty[T]
+trait Antlr2Scala[T]:
+  private val values = ParseTreeProperty[T]
+
   given Conversion[ParseTree, Tree2Scala] = Tree2Scala(_)
-  private[Antlr2Scala] case class Tree2Scala(tree: ParseTree) {
+  private[Antlr2Scala] case class Tree2Scala(tree: ParseTree):
     def apply(i: Int) = tree.getChild(i)
     def text = tree.getText
     def value[E]: E = values.get(tree).asInstanceOf[E]
     def value_=(v: T) = values.put(tree, v)
-  }
-}
 ````

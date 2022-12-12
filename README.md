@@ -28,7 +28,7 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Parser Rules</th>
-      <td colspan="2">
+      <td colspan="2" align="center">
         <a href="interpreter.md#parser-rules">Listener</a> (59 lines)<br>
         <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (23 lines)
       </td>
@@ -53,8 +53,8 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Total</th>
-      <td>190 lines</td>
-      <td>190 lines</td>
+      <td align="center">190 lines</td>
+      <td align="center">190 lines</td>
     </tr>
   </tbody>
 </table>
@@ -107,7 +107,7 @@ statement: ID ':=' expression                          # attrib
          | 'if' bool 'then' statement 'else' statement # if
          | 'while' bool 'do' statement                 # while
          | 'print' Text                                # print
-         | 'write' expression                          # write
+         | 'print' expression                          # write
          | '{' seqStatement '}'                        # block
          ;
 
@@ -130,7 +130,6 @@ bool: ('true'|'false')                                 # boolean
 INT: ('0'..'9')+ ;
 ID: ('a'..'z')+;
 Text: '"' .*? '"';
-
 Space: [ \t\n\r] -> skip;
 ````
 ---

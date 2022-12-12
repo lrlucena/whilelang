@@ -19,3 +19,9 @@ project/plugins/project/
 
 # Metals
 *.metals/
+project/project/metals.sbt
+project/project/project/metals.sbt
+
+.bloop/
+*.interp
+*.antlr
