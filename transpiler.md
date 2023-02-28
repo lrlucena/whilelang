@@ -87,15 +87,14 @@ while b <= 1000000 do {
 </tbody></table>
 
 
-173 lines of code:
+# Interpreter
 
- - Grammar (36 lines)
- - Parser Rules (86 lines)
- - Main (14 lines)
+````shell
+$ sbt
 
-
- - Antlr2Scala (14 lines)
- - Walker (23 lines)
+# To run the interpreter
+sbt> runMain whilelang.interpreter.main sum.while
+````
 
  ## Grammar
 
@@ -138,158 +137,227 @@ while b <= 1000000 do {
  Space: [ \t\n\r] -> skip;
  ````
 
-## Parser Rules
+## Abstract Syntax
+````scala
+package whilelang.parser
+
+enum Statement:
+  case Skip
+  case If(condition: Bool, thenSmt: Statement, elseSmt: Statement)
+  case Write(exp: Expression)
+  case While(condition: Bool, doSmt: Statement)
+  case Print(text: String)
+  case SeqStatement(statements: List[Statement])
+  case Attrib(id: String, exp: Expression)
+  case Program(statements: SeqStatement)
+
+enum Expression:
+  case Read
+  case Id(id: String)
+  case Integer(exp: Int)
+  case ExpSum(lhs: Expression, rhs: Expression)
+  case ExpSub(lhs: Expression, rhs: Expression)
+  case ExpMult(lhs: Expression, rhs: Expression)
+
+enum Bool:
+  case Boole(b: Boolean)
+  case ExpEq(lhs: Expression, rhs: Expression)
+  case ExpLe(lhs: Expression, rhs: Expression)
+  case Not(b: Bool)
+  case And(lhs: Bool, rhs: Bool)
+````
+
+## Semantics
 ````scala
 package whilelang.compiler
 
-import scala.jdk.CollectionConverters._
-import scala.collection.immutable.StringOps
-import scala.language.implicitConversions
-import whilelang.parser.{ Antlr2Scala, WhilelangBaseListener}
-import whilelang.parser.WhilelangParser._
+import collection.mutable.Set
+import whilelang.parser._
+import whilelang.parser.Expression._
+import whilelang.parser.Statement._
+import whilelang.parser.Bool._
 
-class Compiler extends WhilelangBaseListener with Antlr2Scala[String] {
-  var program: String = _
-  val ids = collection.mutable.Set[String]()
+type Ids = Set[String]
+given Ids = Set[String]()
+
+def vars(ids: Ids) =
+  if ids.nonEmpty then s"var ${ids.mkString(", ")} = 0" else ""
+
+extension (src: Any)(using ids: Ids)
+  def meaning: String = m
+  private def m: String = src match
+    case If(cond, tSmt, eSmt) => s"if ${cond.m} then\n  ${tSmt.m}\nelse\n  ${eSmt.m}"
+    case Write(exp)           => s"println(${exp.m})"
+    case Print(text)          => s"println(\"$text\")"
+    case While(cond, doSmt)   => s"while ${cond.m} do\n  ${doSmt.m}"
+    case SeqStatement(stmts)  => stmts.map(_.m).mkString("\n").replaceAll("\n", "\n  ")
+    case Attrib(id, exp)      => ids.add(id); s"$id = ${exp.m}"
+    case Program(seq)         => val main = seq.m; s"@main def main() =\n  ${vars(ids)}\n  ${main}"
+    case Skip                 => "()"
+    case Read                 => "readInt()"
+    case Id(id)               => id
+    case Integer(value)       => s"${value}"
+    case ExpSum(lhs, rhs)     => s"(${lhs.m} + ${rhs.m})"
+    case ExpSub(lhs, rhs)     => s"(${lhs.m} - ${rhs.m})"
+    case ExpMult(lhs, rhs)    => s"(${lhs.m} * ${rhs.m})"
+    case Boole(b)             => s"${b}"
+    case ExpEq(lhs, rhs)      => s"(${lhs.m} == ${rhs.m})"
+    case ExpLe(lhs, rhs)      => s"(${lhs.m} <= ${rhs.m})"
+    case Not(b)               => s"!(${b.m})"
+    case And(lhs, rhs)        => s"(${lhs.m} && ${rhs.m})"
+    case _                    => "~~~ Not Implemented ~~~"
+````
+
+
+## Parser Rules
+````scala
+package whilelang.parser
+
+import scala.jdk.CollectionConverters._
+import org.antlr.v4.runtime.tree.{ParseTree, ParseTreeProperty}
+import whilelang.parser.WhilelangBaseListener
+import whilelang.parser.WhilelangParser.*
+import Statement.*
+import Expression.*
+import Bool.*
+
+given ParseTreeProperty[Any] = ParseTreeProperty[Any]()
+
+extension (tree: ParseTree)(using values: ParseTreeProperty[Any])
+  def apply(i: Int) = tree.getChild(i)
+  def text = tree.getText
+  def value[E]: E = values.get(tree).asInstanceOf[E]
+  def value_=(v: Any) = values.put(tree, v)
+
+class MyListener extends WhilelangBaseListener:
+  var program: Program = _
 
   override def exitProgram(ctx: ProgramContext) =
-    program = s"""@main def main() = {
-                 |  ${if (ids.nonEmpty) s"var ${ids.mkString(", ")} = 0" else ""}
-                 |  ${ctx.seqStatement.value}
-                 |}""".stripMargin
+    ctx.value = Program(ctx.seqStatement.value)
+    program = ctx.value
 
   override def exitSeqStatement(ctx: SeqStatementContext) =
-    ctx.value = ctx.statement().asScala
-      .map(b => b.value[String]).mkString("\n")
-      .replaceAll("\n", "\n  ")
+    ctx.value = SeqStatement(ctx.statement.asScala.toList.map(_.value[Statement]))
 
   override def exitAttrib(ctx: AttribContext) =
-    val id = ctx.ID.text
-    ids += id
-    ctx.value = s"$id = ${ctx.expression.value};"
+    ctx.value = Attrib(ctx.ID.text, ctx.expression.value)
 
   override def exitSkip(ctx: SkipContext) =
-    ctx.value = "()"
+    ctx.value = Skip
 
   override def exitIf(ctx: IfContext) =
-    ctx.value = s"""if (${ctx.bool.value}) {
-                   |  ${ctx.statement(0).value}
-                   |} else {
-                   |  ${ctx.statement(1).value}
-                   |}""".stripMargin
+    ctx.value = If(ctx.bool.value, ctx.statement(0).value, ctx.statement(1).value)
 
   override def exitWhile(ctx: WhileContext) =
-    ctx.value = s"""while(${ctx.bool.value}) {
-                   |  ${ctx.statement.value}
-                   |}""".stripMargin
+    ctx.value = While(ctx.bool.value, ctx.statement.value)
 
   override def exitPrint(ctx: PrintContext) =
-    ctx.value = s"println(${ctx.Text.text});"
+    ctx.value = Print(ctx.Text.text.drop(1).dropRight(1))
 
   override def exitWrite(ctx: WriteContext) =
-    ctx.value = s"println(${ctx.expression.value});"
+    ctx.value = Write(ctx.expression.value)
 
   override def exitBlock(ctx: BlockContext) =
     ctx.value = ctx.seqStatement.value
 
   override def exitRead(ctx: ReadContext) =
-    ctx.value = "readInt()"
+    ctx.value = Read
 
   override def exitId(ctx: IdContext) =
-    ctx.value = s"${ctx.ID.text}"
+    ctx.value = Id(ctx.ID.text)
 
   override def exitExpParen(ctx: ExpParenContext) =
     ctx.value = ctx.expression.value
 
   override def exitInt(ctx: IntContext) =
-    ctx.value = s"${ctx.text.toInt}"
+    ctx.value = Integer(ctx.text.toInt)
 
   override def exitBinOp(ctx: BinOpContext) =
-    ctx.value = s"${ctx.expression(0).value} ${ctx(1).text} ${ctx.expression(1).value}"
+    val lhs: Expression = ctx.expression(0).value
+    val rhs: Expression = ctx.expression(1).value
+    ctx.value = ctx(1).text match
+      case "*"     => ExpMult(lhs, rhs)
+      case "-"     => ExpSub(lhs, rhs)
+      case "+" | _ => ExpSum(lhs, rhs)
 
-  override def exitNot(ctx: NotContext) =
-    ctx.value = s"!(${ctx.bool.value})"
+  override def exitNot(ctx: NotContext) = 
+    ctx.value = Not(ctx.bool.value)
 
   override def exitBoolean(ctx: BooleanContext) =
-    ctx.value = s"""${ctx.text == "true"}"""
+    ctx.value = Boole(ctx.text == "true")
 
   override def exitAnd(ctx: AndContext) =
-    ctx.value = s"(${ctx.bool(0).value} && ${ctx.bool(1).value})"
+    ctx.value = And(ctx.bool(0).value, ctx.bool(1).value)
 
   override def exitBoolParen(ctx: BoolParenContext) =
-    ctx.value = s"(${ctx.bool.value})"
+    ctx.value = ctx.bool.value
 
   override def exitRelOp(ctx: RelOpContext) =
-    ctx.value = s"${ctx.expression(0).value} ${
-      ctx(1).text match
-        case "=" => "=="
-        case op  => op
-    } ${ctx.expression(1).value}"
-}
+    val lhs: Expression = ctx.expression(0).value
+    val rhs: Expression = ctx.expression(1).value
+    ctx.value = ctx(1).text match
+      case "="      => ExpEq(lhs, rhs)
+      case "<=" | _ => ExpLe(lhs, rhs)
 ````
 
 ## Main
-
 ````scala
 package whilelang.compiler
 
-import java.io.FileNotFoundException
-import scala.util.{ Failure, Success, Try }
-import whilelang.parser.Walker
+import whilelang.util.Runner
 
-implicit val listener: Compiler = new Compiler()
+def action = Runner(program => println(program.meaning))
 
-@main def main(file: String) =
-  val sourceCode = Try { io.Source.fromFile(file).getLines().mkString("\n")}
-  sourceCode.flatMap(Walker.walk) match
-    case Success(_)                        => println(listener.program)
-    case Failure(e: FileNotFoundException) => println("File not found")
-    case Failure(e)                        => println("Error: " + e.printStackTrace())
+@main def main(file: String) = action(file)
 ````
 
 ## Auxiliary Classes
 
+### Runner
+````scala
+package whilelang.util
+
+import java.io.FileNotFoundException
+import scala.util.{Failure, Success}
+import whilelang.parser.MyListener
+import whilelang.parser.Statement.Program
+import Walker.{sourceCode, walk}
+
+given MyListener = MyListener()
+
+object Runner:
+  def apply(action: Program => Unit)(file: String) = sourceCode(file).flatMap(walk) match
+    case Success(program)                  => action(program)
+    case Failure(e: FileNotFoundException) => println("File not found")
+    case Failure(e)                        => println("Error: " + e.printStackTrace())
+````
+
 ### Walker
 ````scala
-package whilelang.parser
+package whilelang.util
 
 import scala.util.Try
 import org.antlr.v4.runtime.{BaseErrorListener, CharStream, CharStreams, CommonTokenStream, RecognitionException, Recognizer }
 import org.antlr.v4.runtime.misc.ParseCancellationException
 import org.antlr.v4.runtime.tree.ParseTreeWalker
+import whilelang.parser.{WhilelangParser, WhilelangLexer, MyListener}
 
-object ThrowingErrorListener extends BaseErrorListener {
-  override def syntaxError(r: Recognizer[_, _], off: Any, line: Int, col: Int, msg: String, e: RecognitionException) =
-    throw new ParseCancellationException(s"line $line:$col $msg")
-}
+object ThrowingErrorListener extends BaseErrorListener:
+  override def syntaxError(r: Recognizer[?, ?], off: Any, line: Int, col: Int, msg: String, e: RecognitionException) =
+    throw ParseCancellationException(s"line $line:$col $msg")
 
-object Walker {
-  def walk(source: String)(implicit listener: WhilelangListener) = Try {
-    val addListener = (r: Recognizer[_, _]) =>
-      r.removeErrorListeners()
-      r.addErrorListener(ThrowingErrorListener)
-    val lexer = new WhilelangLexer(CharStreams.fromString(source)) { addListener(this) }
-    val parser = new WhilelangParser(new CommonTokenStream(lexer)) { addListener(this) }
+object Walker:
+  def sourceCode(file: String): Try[String] = Try:
+    io.Source.fromFile(file).getLines().mkString("\n")
 
-    new ParseTreeWalker().walk(listener, parser.program)
-  }
-}
-````
+  private def addListener(r: Recognizer[?, ?]*): Unit = r.map : r =>
+    r.removeErrorListeners()
+    r.addErrorListener(ThrowingErrorListener)
 
-### Antlr2Scala
-````scala
-package whilelang.parser
-
-import org.antlr.v4.runtime.tree.{ ParseTree, ParseTreeProperty }
-
-trait Antlr2Scala[T] {
-  private[Antlr2Scala] val values = new ParseTreeProperty[T]
-  given Conversion[ParseTree, Tree2Scala] = Tree2Scala(_)
-  private[Antlr2Scala] case class Tree2Scala(tree: ParseTree) {
-    def apply(i: Int) = tree.getChild(i)
-    def text = tree.getText
-    def value[E]: E = values.get(tree).asInstanceOf[E]
-    def value_=(v: T) = values.put(tree, v)
-  }
-}
+  def walk(source: String)(using listener: MyListener) = Try:
+    val lexer = WhilelangLexer(CharStreams.fromString(source))
+    val parser = WhilelangParser(CommonTokenStream(lexer))
+    addListener(lexer, parser)
+    ParseTreeWalker().walk(listener, parser.program)
+    listener.program
 ````

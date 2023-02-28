@@ -2,14 +2,14 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1705795c5f74b9289b6f4c942dd5911)](https://www.codacy.com/app/leonardo-lucena/whilelang?utm_source=github.com&utm_medium=referral&utm_content=lrlucena/whilelang&utm_campaign=badger)
 
-> A small programming language created with ANTLR and Scala.
+> A small programming language made with [Scala](https://scala-lang.org) and [ANTLR](https://antlr.org).
 
-This is a programming language with only one loop instruction (while) and a single type (integer).
-The goal is to show that it is possible to implement a programming language with a only few lines of code.
+This is a simple programming language that has only one loop instruction (while) and a single type (integer).
+We want to show that you can make a programming language with a only few lines of code.
 
 The language is implemented in two ways:
  - as an [interpreter](interpreter.md)
- - as a [transpiler](transpiler.md) (compiler) for the Scala language.
+ - as a [transpiler](transpiler.md) (compiler) for Scala.
 
 <table>
   <thead>
@@ -27,41 +27,45 @@ The language is implemented in two ways:
       </td>
     </tr>
     <tr>
-      <th>Parser Rules</th>
+      <th>Abstract Syntax</th>
       <td colspan="2" align="center">
-        <a href="interpreter.md#parser-rules">Listener</a> (59 lines)<br>
         <a href="interpreter.md#abstract-syntax">Abstract Syntax</a> (23 lines)
       </td>
     </tr>
     <tr>
       <th>Semantics</th>
-      <td align="center"><a href="interpreter.md#parser-rules">Semantics</a> (31 lines)</td>
-      <td align="center"><a href="interpreter.md#parser-rules">Semantics</a> (31 lines)</td>
+      <td align="center"><a href="interpreter.md#parser-rules">Semantics</a> (35 lines)</td>
+      <td align="center"><a href="transpiler.md#parser-rules">Semantics</a> (33 lines)</td>
+    </tr>
+    <tr>
+      <th>Parser Rules</th>
+      <td colspan="2" align="center">
+        <a href="interpreter.md#parser-rules">Listener</a> (64 lines)
+      </td>
     </tr>
     <tr>
       <th>Main</th>
-      <td align="center"><a href="interpreter.md#main">Main</a> (3 lines)</td>
-      <td align="center"><a href="transpiler.md#main">Main</a> (3 lines)</td>
+      <td align="center"><a href="interpreter.md#main">Main</a> (4 lines)</td>
+      <td align="center"><a href="transpiler.md#main">Main</a> (4 lines)</td>
     </tr>
     <tr>
       <th>Utility Classes</th>
       <td colspan="2" align="center">
-      <a href="interpreter.md#antlr2scala">Antr2Scala</a> (10 lines)<br>
-      <a href="interpreter.md#walker">Walker</a> (23 lines)<br>
+      <a href="interpreter.md#walker">Walker</a> (21 lines)<br>
       <a href="interpreter.md#walker">Runner</a> (12 lines)
       </td>
     </tr>
     <tr>
       <th>Total</th>
-      <td align="center">190 lines</td>
-      <td align="center">190 lines</td>
+      <td align="center">188 lines</td>
+      <td align="center">186 lines</td>
     </tr>
   </tbody>
 </table>
 
 
 ## Examples
-Here are some code examples:
+Here are some examples:
 
 Hello World
 ````ruby
