@@ -34,13 +34,13 @@ The language is implemented in two ways:
     </tr>
     <tr>
       <th>Semantics</th>
-      <td align="center"><a href="interpreter.md#parser-rules">Semantics</a> (35 lines)</td>
-      <td align="center"><a href="transpiler.md#parser-rules">Semantics</a> (33 lines)</td>
+      <td align="center"><a href="interpreter.md#semantics">Semantics</a> (35 lines)</td>
+      <td align="center"><a href="transpiler.md#semantics">Semantics</a> (33 lines)</td>
     </tr>
     <tr>
       <th>Parser Rules</th>
       <td colspan="2" align="center">
-        <a href="interpreter.md#parser-rules">Listener</a> (64 lines)
+        <a href="interpreter.md#parser-rules">Listener</a> (58 lines)
       </td>
     </tr>
     <tr>
@@ -52,13 +52,14 @@ The language is implemented in two ways:
       <th>Utility Classes</th>
       <td colspan="2" align="center">
       <a href="interpreter.md#walker">Walker</a> (21 lines)<br>
-      <a href="interpreter.md#walker">Runner</a> (12 lines)
+      <a href="interpreter.md#runner">Runner</a> (12 lines)<br>
+      <a href="interpreter.md#contextvalue">Runner</a> (9 lines)
       </td>
     </tr>
     <tr>
       <th>Total</th>
-      <td align="center">188 lines</td>
-      <td align="center">186 lines</td>
+      <td align="center">191 lines</td>
+      <td align="center">189 lines</td>
     </tr>
   </tbody>
 </table>

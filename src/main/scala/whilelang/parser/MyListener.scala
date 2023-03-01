@@ -1,22 +1,14 @@
 package whilelang.parser
 
-import scala.jdk.CollectionConverters._
-import org.antlr.v4.runtime.tree.{ParseTree, ParseTreeProperty}
+import scala.jdk.CollectionConverters.ListHasAsScala
 import whilelang.parser.WhilelangBaseListener
 import whilelang.parser.WhilelangParser.*
+import whilelang.util.ContextValue
 import Statement.*
 import Expression.*
 import Bool.*
 
-given ParseTreeProperty[Any] = ParseTreeProperty[Any]()
-
-extension (tree: ParseTree)(using values: ParseTreeProperty[Any])
-  def apply(i: Int) = tree.getChild(i)
-  def text = tree.getText
-  def value[E]: E = values.get(tree).asInstanceOf[E]
-  def value_=(v: Any) = values.put(tree, v)
-
-class MyListener extends WhilelangBaseListener:
+class MyListener extends WhilelangBaseListener with ContextValue:
   var program: Program = _
 
   override def exitProgram(ctx: ProgramContext) =
