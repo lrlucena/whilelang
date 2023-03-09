@@ -5,8 +5,8 @@ import org.antlr.v4.runtime.tree.{ParseTree, ParseTreeProperty}
 trait ContextValue:
   given ParseTreeProperty[Any] = ParseTreeProperty[Any]()
 
-  extension (tree: ParseTree)(using values: ParseTreeProperty[Any])
+  extension[A](tree: ParseTree)(using values: ParseTreeProperty[A])
     def apply(i: Int) = tree.getChild(i)
     def text = tree.getText
     def value[E]: E = values.get(tree).asInstanceOf[E]
-    def value_=(v: Any) = values.put(tree, v)
+    def value_=(v: A) = values.put(tree, v)
