@@ -20,7 +20,7 @@ extension (stmt: Statement)(using env: Environment)
     case Program(seq)         => seq.execute
     case Skip | _             =>
 
-extension(exp: Expression)(using env: Environment)
+extension (exp: Expression)(using env: Environment)
   def value: Int = exp match
     case Read                 => io.StdIn.readInt()
     case Id(id)               => env.getOrElseUpdate(id, 0)
@@ -30,7 +30,7 @@ extension(exp: Expression)(using env: Environment)
     case ExpMult(lhs, rhs)    => lhs.value * rhs.value
     case null | _             => 0
 
-extension(exp: Bool)(using env: Environment)
+extension (exp: Bool)(using env: Environment)
   def value: Boolean = exp match
     case Boole(b)             => b
     case ExpEq(lhs, rhs)      => lhs.value == rhs.value

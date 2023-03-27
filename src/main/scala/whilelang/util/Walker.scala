@@ -4,7 +4,7 @@ import scala.util.Try
 import org.antlr.v4.runtime.{BaseErrorListener, CharStream, CharStreams, CommonTokenStream, RecognitionException, Recognizer }
 import org.antlr.v4.runtime.misc.ParseCancellationException
 import org.antlr.v4.runtime.tree.ParseTreeWalker
-import whilelang.parser.{WhilelangParser, WhilelangLexer, MyListener}
+import whilelang.parser.{WhilelangParser as Parser, WhilelangLexer as Lexer, MyListener => Listener}
 
 object ThrowingErrorListener extends BaseErrorListener:
   override def syntaxError(r: Recognizer[?, ?], off: Any, line: Int, col: Int, msg: String, e: RecognitionException) =
@@ -18,9 +18,9 @@ object Walker:
     r.removeErrorListeners()
     r.addErrorListener(ThrowingErrorListener)
 
-  def walk(source: String)(using listener: MyListener) = Try:
-    val lexer = WhilelangLexer(CharStreams.fromString(source))
-    val parser = WhilelangParser(CommonTokenStream(lexer))
+  def walk(source: String)(using listener: Listener) = Try:
+    val lexer = Lexer(CharStreams.fromString(source))
+    val parser = Parser(CommonTokenStream(lexer))
     addListener(lexer, parser)
     ParseTreeWalker().walk(listener, parser.program)
     listener.program

@@ -1,10 +1,10 @@
 package whilelang.compiler
 
 import collection.mutable.Set
-import whilelang.parser._
-import whilelang.parser.Expression._
-import whilelang.parser.Statement._
-import whilelang.parser.Bool._
+import whilelang.parser.*
+import whilelang.parser.Expression.*
+import whilelang.parser.Statement.*
+import whilelang.parser.Bool.*
 
 type Ids = Set[String]
 given Ids = Set[String]()

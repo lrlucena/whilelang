@@ -2,11 +2,11 @@ package whilelang.util
 
 import java.io.FileNotFoundException
 import scala.util.{Failure, Success}
-import whilelang.parser.MyListener
+import whilelang.parser.MyListener as Listener
 import whilelang.parser.Statement.Program
 import Walker.{sourceCode, walk}
 
-given MyListener = MyListener()
+given Listener = Listener()
 
 object Runner:
   def apply(action: Program => Unit)(file: String) = sourceCode(file).flatMap(walk) match

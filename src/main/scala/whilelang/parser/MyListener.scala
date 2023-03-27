@@ -1,14 +1,14 @@
 package whilelang.parser
 
 import scala.jdk.CollectionConverters.ListHasAsScala
-import whilelang.parser.WhilelangBaseListener
+import whilelang.parser.WhilelangBaseListener as BaseListener
 import whilelang.parser.WhilelangParser.*
 import whilelang.util.ContextValue
 import Statement.*
 import Expression.*
 import Bool.*
 
-class MyListener extends WhilelangBaseListener with ContextValue:
+class MyListener extends BaseListener with ContextValue:
   var program: Program = _
 
   override def exitProgram(ctx: ProgramContext) =
