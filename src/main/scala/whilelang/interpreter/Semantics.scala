@@ -1,10 +1,10 @@
 package whilelang.interpreter
 
 import scala.collection.mutable.Map
-import whilelang.parser._
-import whilelang.parser.Statement._
-import whilelang.parser.Expression._
-import whilelang.parser.Bool._
+import whilelang.parser.*
+import whilelang.parser.Statement.*
+import whilelang.parser.Expression.*
+import whilelang.parser.Bool.*
 
 type Environment = Map[String, Int]
 given Environment = Map[String, Int]()
