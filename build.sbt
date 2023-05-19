@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "3.3.0-RC4"
+ThisBuild / scalaVersion := "3.3.0-RC6"
 ThisBuild / organization := "com.github.lrlucena"
 ThisBuild / version := "1.3.1"
 
