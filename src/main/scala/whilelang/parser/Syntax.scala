@@ -6,7 +6,7 @@ enum Statement:
   case Write(exp: Expression)
   case While(condition: Bool, doSmt: Statement)
   case Print(text: String)
-  case SeqStatement(statements: List[Statement])
+  case SeqStatement(statements: Seq[Statement])
   case Attrib(id: String, exp: Expression)
   case Program(statements: SeqStatement)
 

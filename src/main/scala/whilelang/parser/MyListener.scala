@@ -1,6 +1,5 @@
 package whilelang.parser
 
-import scala.jdk.CollectionConverters.ListHasAsScala
 import whilelang.parser.WhilelangBaseListener as BaseListener
 import whilelang.parser.WhilelangParser.*
 import whilelang.util.ContextValue
@@ -9,15 +8,16 @@ import Expression.*
 import Bool.*
 
 class MyListener extends BaseListener with ContextValue:
+
   var program: Program = _
 
-  override def exitProgram(ctx: ProgramContext) = ctx.value_= : 
-    program ctx.seqStatement.value
+  override def exitProgram(ctx: ProgramContext) = program = Program :
+    ctx.seqStatement.value
 
   override def exitSeqStatement(ctx: SeqStatementContext) = ctx.value_= :
-    SeqStatement(ctx.statement.asScala.toList.map(_.value[Statement]))
+    SeqStatement(ctx.statement.map(_.value[Statement]))
 
-  override def exitAttrib(ctx: AttribContext) = ctx.value_= :
+  override def exitAttrib(ctx: AttribContext) = ctx.value_= : 
     Attrib(ctx.ID.text, ctx.expression.value)
 
   override def exitSkip(ctx: SkipContext) = ctx.value_= :
@@ -35,7 +35,7 @@ class MyListener extends BaseListener with ContextValue:
   override def exitWrite(ctx: WriteContext) = ctx.value_= : 
     Write(ctx.expression.value)
 
-  override def exitBlock(ctx: BlockContext) = ctx.value_= : 
+  override def exitBlock(ctx: BlockContext) = ctx.value_= :
     ctx.seqStatement.value
 
   override def exitRead(ctx: ReadContext) = ctx.value_= :
@@ -56,7 +56,7 @@ class MyListener extends BaseListener with ContextValue:
     ctx(1).text match
       case "*"     => ExpMult(lhs, rhs)
       case "-"     => ExpSub(lhs, rhs)
-      case "+" | _ => ExpSum(lhs, rhs))
+      case "+" | _ => ExpSum(lhs, rhs)
 
   override def exitNot(ctx: NotContext) = ctx.value_= : 
     Not(ctx.bool.value)
@@ -75,4 +75,4 @@ class MyListener extends BaseListener with ContextValue:
     val rhs: Expression = ctx.expression(1).value
     ctx(1).text match
       case "="      => ExpEq(lhs, rhs)
-      case "<=" | _ => ExpLe(lhs, rhs))
+      case "<=" | _ => ExpLe(lhs, rhs)
