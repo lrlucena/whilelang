@@ -5,18 +5,18 @@
 > A small programming language made with [Scala](https://scala-lang.org) and [ANTLR](https://antlr.org).
 
 This is a simple programming language that has only one loop instruction (while) and a single type (integer).
-We want to show that you can make a programming language with a only few lines of code.
+We want to show how to implement a programming language with a few lines of code.
 
 The language is implemented in two ways:
  - as an [interpreter](interpreter.md)
- - as a [transpiler](transpiler.md) (compiler) for Scala.
+ - as a [transpiler](transpiler.md) (compiler) to Scala.
 
 <table>
   <thead>
     <tr>
       <th> </th>
       <th align="center">Interpreter</th>
-      <th align="center">Compiler (Transpiler)</th>
+      <th align="center">Transpiler (Compiler)</th>
     </tr>
     </thead>
     <tbody>
@@ -40,7 +40,7 @@ The language is implemented in two ways:
     <tr>
       <th>Parser Rules</th>
       <td colspan="2" align="center">
-        <a href="interpreter.md#parser-rules">Listener</a> (58 lines)
+        <a href="interpreter.md#parser-rules">Listener</a> (55 lines)
       </td>
     </tr>
     <tr>
@@ -51,15 +51,15 @@ The language is implemented in two ways:
     <tr>
       <th>Utility Classes</th>
       <td colspan="2" align="center">
-      <a href="interpreter.md#walker">Walker</a> (21 lines)<br>
+      <a href="interpreter.md#walker">Walker</a> (22 lines)<br>
       <a href="interpreter.md#runner">Runner</a> (12 lines)<br>
-      <a href="interpreter.md#contextvalue">Runner</a> (9 lines)
+      <a href="interpreter.md#contextvalue">ContextValue</a> (12 lines)
       </td>
     </tr>
     <tr>
       <th>Total</th>
-      <td align="center">191 lines</td>
-      <td align="center">189 lines</td>
+      <td align="center">192 lines</td>
+      <td align="center">190 lines</td>
     </tr>
   </tbody>
 </table>

@@ -15,7 +15,7 @@ class MyListener extends BaseListener with ContextValue:
     ctx.seqStatement.value
 
   override def exitSeqStatement(ctx: SeqStatementContext): Unit = ctx.value_= :
-    SeqStatement(ctx.statement.map(_.value[Statement]))
+    SeqStatement(ctx.statement.map(_.value))
 
   override def exitAttrib(ctx: AttribContext): Unit = ctx.value_= :
     Attrib(ctx.ID.text, ctx.expression.value)
@@ -51,8 +51,7 @@ class MyListener extends BaseListener with ContextValue:
     Integer(ctx.text.toInt)
 
   override def exitBinOp(ctx: BinOpContext): Unit = ctx.value_= :
-    val lhs: Expression = ctx.expression(0).value
-    val rhs: Expression = ctx.expression(1).value
+    val Seq(lhs, rhs): Seq[Expression] = ctx.expression.map(_.value)
     ctx(1).text match
       case "*" => ExpMult(lhs, rhs)
       case "-" => ExpSub(lhs, rhs)
@@ -71,8 +70,7 @@ class MyListener extends BaseListener with ContextValue:
     ctx.bool.value
 
   override def exitRelOp(ctx: RelOpContext): Unit = ctx.value_= :
-    val lhs: Expression = ctx.expression(0).value
-    val rhs: Expression = ctx.expression(1).value
+    val Seq(lhs, rhs): Seq[Expression] = ctx.expression.map(_.value)
     ctx(1).text match
-      case "=" => ExpEq(lhs, rhs)
+      case "="      => ExpEq(lhs, rhs)
       case "<=" | _ => ExpLe(lhs, rhs)
