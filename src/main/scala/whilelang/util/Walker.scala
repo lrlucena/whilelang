@@ -8,20 +8,17 @@ import whilelang.parser.{Statement, MyListener as Listener, WhilelangLexer as Le
 
 import scala.util.Try
 
-object ThrowingErrorListener extends BaseErrorListener:
-  override def syntaxError(r: Recognizer[?, ?], off: Any, line: Int, col: Int, msg: String, e: RecognitionException) =
-    throw ParseCancellationException(s"line $line:$col $msg")
-
 object Walker:
-  def sourceCode(file: String): Try[String] = Try:
-    io.Source.fromFile(file).getLines.mkString("\n")
-
-  def walk(source: String)(using listener: Listener): Try[Program] = Try:
+  def apply(listener: Listener)(source: String): Try[Program] = Try:
     val lexer = Lexer(CharStreams.fromString(source))
     val parser = Parser(CommonTokenStream(lexer))
     addListener(lexer, parser)
     ParseTreeWalker().walk(listener, parser.program)
     listener.program
+
+  object ThrowingErrorListener extends BaseErrorListener:
+    override def syntaxError(r: Recognizer[?, ?], off: Any, line: Int, col: Int, msg: String, e: RecognitionException) =
+      throw ParseCancellationException(s"line $line:$col $msg")
 
   private def addListener(r: Recognizer[?, ?]*): Unit = r.foreach: r =>
     r.removeErrorListeners()

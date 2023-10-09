@@ -15,7 +15,7 @@ class MyListener extends BaseListener with ContextValue:
     ctx.seqStatement.value
 
   override def exitSeqStatement(ctx: SeqStatementContext): Unit = ctx.value_= :
-    SeqStatement(ctx.statement.map(_.value))
+    SeqStatement(ctx.statement.map(_.value[Statement]))
 
   override def exitAttrib(ctx: AttribContext): Unit = ctx.value_= :
     Attrib(ctx.ID.text, ctx.expression.value)
