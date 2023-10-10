@@ -24,7 +24,8 @@ class MyListener extends BaseListener with ContextValue:
     Skip
 
   override def exitIf(ctx: IfContext): Unit = ctx.value_= :
-    If(ctx.bool.value, ctx.statement(0).value, ctx.statement(1).value)
+    val Seq(thenStat, elseStat) = ctx.statement.map(_.value[Statement])
+    If(ctx.bool.value, thenStat, elseStat)
 
   override def exitWhile(ctx: WhileContext): Unit = ctx.value_= :
     While(ctx.bool.value, ctx.statement.value)
@@ -51,11 +52,11 @@ class MyListener extends BaseListener with ContextValue:
     Integer(ctx.text.toInt)
 
   override def exitBinOp(ctx: BinOpContext): Unit = ctx.value_= :
-    val Seq(lhs, rhs): Seq[Expression] = ctx.expression.map(_.value)
+    val Seq(lhs, rhs) = ctx.expression.map(_.value[Expression])
     ctx(1).text match
       case "*" => ExpMult(lhs, rhs)
       case "-" => ExpSub(lhs, rhs)
-      case "+" | _ => ExpSum(lhs, rhs)
+      case _ => ExpSum(lhs, rhs)
 
   override def exitNot(ctx: NotContext): Unit = ctx.value_= :
     Not(ctx.bool.value)
@@ -70,7 +71,7 @@ class MyListener extends BaseListener with ContextValue:
     ctx.bool.value
 
   override def exitRelOp(ctx: RelOpContext): Unit = ctx.value_= :
-    val Seq(lhs, rhs): Seq[Expression] = ctx.expression.map(_.value)
+    val Seq(lhs, rhs) = ctx.expression.map(_.value[Expression])
     ctx(1).text match
-      case "="      => ExpEq(lhs, rhs)
-      case "<=" | _ => ExpLe(lhs, rhs)
+      case "=" => ExpEq(lhs, rhs)
+      case _ => ExpLe(lhs, rhs)

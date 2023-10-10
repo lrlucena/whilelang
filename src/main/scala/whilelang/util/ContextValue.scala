@@ -4,9 +4,9 @@ import org.antlr.v4.runtime.tree.{ParseTree, ParseTreeProperty as Property}
 import scala.jdk.CollectionConverters.ListHasAsScala
 
 trait ContextValue:
-  given Property[Any] = Property[Any]()
+  private val values = Property[Any]()
 
-  extension (tree: ParseTree)(using values: Property[Any])
+  extension (tree: ParseTree)
     def apply(i: Int): ParseTree = tree.getChild(i)
     def text: String = tree.getText
     def value[E <: Any]: E = values.get(tree).asInstanceOf[E]
