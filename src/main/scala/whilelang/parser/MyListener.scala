@@ -74,4 +74,4 @@ class MyListener extends BaseListener with ContextValue:
     val Seq(lhs, rhs) = ctx.expression.map(_.value[Expression])
     ctx(1).text match
       case "=" => ExpEq(lhs, rhs)
-      case _ => ExpLe(lhs, rhs)
+      case _   => ExpLe(lhs, rhs)
