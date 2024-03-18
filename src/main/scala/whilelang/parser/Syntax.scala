@@ -1,6 +1,8 @@
 package whilelang.parser
 
-enum Statement:
+trait Element
+
+enum Statement extends Element:
   case Skip
   case If(condition: Bool, thenSmt: Statement, elseSmt: Statement)
   case Write(exp: Expression)
@@ -10,7 +12,7 @@ enum Statement:
   case Attrib(id: String, exp: Expression)
   case Program(statements: SeqStatement)
 
-enum Expression:
+enum Expression extends Element:
   case Read
   case Id(id: String)
   case Integer(exp: Int)
@@ -18,7 +20,7 @@ enum Expression:
   case ExpSub(lhs: Expression, rhs: Expression)
   case ExpMult(lhs: Expression, rhs: Expression)
 
-enum Bool:
+enum Bool extends Element:
   case Boole(b: Boolean)
   case ExpEq(lhs: Expression, rhs: Expression)
   case ExpLe(lhs: Expression, rhs: Expression)

@@ -1,10 +1,11 @@
 package whilelang.util
 
-import org.antlr.v4.runtime.tree.{ParseTree, ParseTreeProperty as Property}
+import org.antlr.v4.runtime.tree.{ParseTree, ParseTreeProperty}
 import scala.jdk.CollectionConverters.ListHasAsScala
+import whilelang.parser.Element
 
 trait ContextValue:
-  private val values = Property[Any]()
+  private val values = ParseTreeProperty[Any]()
 
   extension (tree: ParseTree)
     def apply(i: Int): ParseTree = tree.getChild(i)
