@@ -5,9 +5,8 @@ trait Element
 enum Statement extends Element:
   case Skip
   case If(condition: Bool, thenSmt: Statement, elseSmt: Statement)
-  case Write(exp: Expression)
   case While(condition: Bool, doSmt: Statement)
-  case Print(text: String)
+  case Print(exp: String | Expression)
   case SeqStatement(statements: Seq[Statement])
   case Attrib(id: String, exp: Expression)
   case Program(statements: SeqStatement)

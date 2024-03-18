@@ -2,10 +2,9 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1705795c5f74b9289b6f4c942dd5911)](https://www.codacy.com/app/leonardo-lucena/whilelang?utm_source=github.com&utm_medium=referral&utm_content=lrlucena/whilelang&utm_campaign=badger)
 
-> A small programming language made with [Scala](https://scala-lang.org) and [ANTLR](https://antlr.org).
+> A small programming language made with [Scala 3.4](https://scala-lang.org) and [ANTLR 4.13](https://antlr.org).
 
 This is a simple programming language that has only one loop instruction (while) and a single type (integer).
-We want to show how to implement a programming language with a few lines of code.
 
 The language is implemented in two ways:
  - as an [interpreter](interpreter.md)
@@ -35,12 +34,12 @@ The language is implemented in two ways:
     <tr>
       <th>Semantics</th>
       <td align="center"><a href="interpreter.md#semantics">Semantics</a> (35 lines)</td>
-      <td align="center"><a href="transpiler.md#semantics">Semantics</a> (33 lines)</td>
+      <td align="center"><a href="transpiler.md#semantics">Semantics</a> (34 lines)</td>
     </tr>
     <tr>
       <th>Parser Rules</th>
       <td colspan="2" align="center">
-        <a href="interpreter.md#parser-rules">Listener</a> (55 lines)
+        <a href="interpreter.md#parser-rules">Listener</a> (56 lines)
       </td>
     </tr>
     <tr>
@@ -51,15 +50,15 @@ The language is implemented in two ways:
     <tr>
       <th>Utility Classes</th>
       <td colspan="2" align="center">
-      <a href="interpreter.md#walker">Walker</a> (22 lines)<br>
-      <a href="interpreter.md#runner">Runner</a> (12 lines)<br>
-      <a href="interpreter.md#contextvalue">ContextValue</a> (12 lines)
+      <a href="interpreter.md#walker">Walker</a> (20 lines)<br>
+      <a href="interpreter.md#runner">Runner</a> (14 lines)<br>
+      <a href="interpreter.md#contextvalue">ContextValue</a> (13 lines)
       </td>
     </tr>
     <tr>
       <th>Total</th>
-      <td align="center">192 lines</td>
-      <td align="center">190 lines</td>
+      <td align="center">194 lines</td>
+      <td align="center">193 lines</td>
     </tr>
   </tbody>
 </table>

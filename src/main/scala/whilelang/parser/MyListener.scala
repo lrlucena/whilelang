@@ -35,7 +35,7 @@ class MyListener extends BaseListener with ContextValue:
     Print(ctx.Text.text.drop(1).dropRight(1))
 
   override def exitWrite(ctx: WriteContext) = ctx.value_= :
-    Write(ctx.expression.value)
+    Print(ctx.expression.value)
 
   override def exitBlock(ctx: BlockContext) = ctx.value_= :
     ctx.seqStatement.value
