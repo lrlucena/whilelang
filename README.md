@@ -1,24 +1,23 @@
-# While language
+# While Language
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1705795c5f74b9289b6f4c942dd5911)](https://www.codacy.com/app/leonardo-lucena/whilelang?utm_source=github.com&utm_medium=referral&utm_content=lrlucena/whilelang&utm_campaign=badger)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1705795c5f74b9289b6f4c942dd5911)](https://app.codacy.com/gh/lrlucena/whilelang)
+> A minimalistic programming language built using [Scala 3.4](https://scala-lang.org) and [ANTLR 4.13](https://antlr.org).
 
-> A small programming language made with [Scala 3.4](https://scala-lang.org) and [ANTLR 4.13](https://antlr.org).
+This simple programming language features a single loop construct (`while`) and supports only integer types. 
 
-This is a simple programming language that has only one loop instruction (while) and a single type (integer).
-
-The language is implemented in two ways:
- - as an [interpreter](interpreter.md)
- - as a [transpiler](transpiler.md) (compiler) to Scala.
+The language is implemented in two distinct ways:
+- As an [interpreter](interpreter.md)
+- As a [transpiler](transpiler.md) (source-to-source compiler) targeting Scala.
 
 <table>
   <thead>
     <tr>
-      <th> </th>
+      <th></th>
       <th align="center">Interpreter</th>
       <th align="center">Transpiler (Compiler)</th>
     </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
     <tr>
       <th>Grammar</th>
       <td colspan="2" align="center">
@@ -50,9 +49,9 @@ The language is implemented in two ways:
     <tr>
       <th>Utility Classes</th>
       <td colspan="2" align="center">
-      <a href="interpreter.md#walker">Walker</a> (20 lines)<br>
-      <a href="interpreter.md#runner">Runner</a> (14 lines)<br>
-      <a href="interpreter.md#contextvalue">ContextValue</a> (13 lines)
+        <a href="interpreter.md#walker">Walker</a> (20 lines)<br>
+        <a href="interpreter.md#runner">Runner</a> (14 lines)<br>
+        <a href="interpreter.md#contextvalue">ContextValue</a> (13 lines)
       </td>
     </tr>
     <tr>
@@ -63,17 +62,16 @@ The language is implemented in two ways:
   </tbody>
 </table>
 
-
 ## Examples
-Here are some examples:
+Below are some example programs:
 
-Hello World
-````ruby
+### Hello World
+````text
 print "Hello World"
 ````
 
-Sum of two numbers
-````ruby
+### Sum of Two Numbers
+````text
 print "Enter the first number:";
 a := read;
 print "Enter the second number:";
@@ -83,8 +81,8 @@ print "The sum is: ";
 print sum
 ````
 
-Fibonacci Sequence
-````ruby
+### Fibonacci Sequence
+````text
 print "Fibonacci Sequence";
 a := 0;
 b := 1;
@@ -96,8 +94,7 @@ while b <= 1000000 do {
 ````
 
 ## Grammar
-
-The formal syntax is as follows (ANTLR syntax):
+The formal syntax, defined in ANTLR, is as follows:
 
 ````antlr
 grammar Whilelang;
@@ -136,20 +133,21 @@ ID: ('a'..'z')+;
 Text: '"' .*? '"';
 Space: [ \t\n\r] -> skip;
 ````
+
 ---
 
-## Compiling & Running
+## Compiling and Running
 
-To compile you need to install [sbt](https://www.scala-sbt.org/). The easiest way is to use [Sdkman](https://sdkman.io/install) (Linux) or [Scoop](https://scoop.sh/) (Windows).
+To compile the project, you'll need to install [sbt](https://www.scala-sbt.org/). The easiest installation method is via [SDKMAN!](https://sdkman.io/install) (Linux) or [Scoop](https://scoop.sh/) (Windows).
 
 ````shell
 $ sbt
 sbt> clean
 sbt> compile
 
-# To run the interpreter
+# Run the interpreter
 sbt> runMain whilelang.interpreter.main sum.while
 
-# To run the transpiler
+# Run the transpiler
 sbt> runMain whilelang.compiler.main sum.while
 ````
