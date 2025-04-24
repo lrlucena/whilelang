@@ -1,1 +1,1 @@
-addSbtPlugin("ch.epfl.scala" % "sbt-scala3-migrate" % "0.5.1")
+addSbtPlugin("ch.epfl.scala" % "sbt-scala3-migrate" % "0.7.2")
