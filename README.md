@@ -1,7 +1,7 @@
 # While Language
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/b1705795c5f74b9289b6f4c942dd5911)](https://app.codacy.com/gh/lrlucena/whilelang)
-> A minimalistic programming language built using [Scala 3.4](https://scala-lang.org) and [ANTLR 4.13](https://antlr.org).
+> A minimalistic programming language built using [Scala 3.6](https://scala-lang.org) and [ANTLR 4.13](https://antlr.org).
 
 This simple programming language features a single loop construct (`while`) and supports only integer types. 
 
