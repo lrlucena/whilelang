@@ -105,6 +105,7 @@ while b <= 1000000 do {
 </table>
 
 Key translation patterns:
+
 - `print` statements become `println` with string literals
 - `read` operations map to `readInt()` calls
 - While loops preserve their structure
@@ -115,6 +116,12 @@ Key translation patterns:
 ## Translation Semantics
 
 The core translation logic uses extension methods to convert AST nodes to Scala code:
+
+```scala linenums="1"
+--8<--
+src/main/scala/whilelang/compiler/Semantics.scala
+--8<--
+```
 
 ````scala
 package whilelang.compiler
@@ -133,6 +140,7 @@ extension (src: Any)(using ids: Ids)
 ````
 
 Notable features:
+
 - **Variable Tracking**: Automatically detects variable declarations
 - **String Building**: Recursively constructs Scala source strings
 - **Syntax Preservation**: Maintains original program structure where possible
@@ -156,6 +164,7 @@ class MyListener extends WhilelangBaseListener with ContextValue:
 ````
 
 The parser:
+
 - Uses the same grammar as the interpreter
 - Constructs identical AST structure
 - Enables code reuse between interpreter and transpiler
@@ -166,6 +175,12 @@ The parser:
 
 The transpiler entry point generates and prints Scala code:
 
+```scala linenums="1"
+--8<--
+src/main/scala/whilelang/compiler/Main.scala
+--8<--
+```
+
 ````scala
 package whilelang.compiler
 
@@ -175,6 +190,7 @@ def action = Runner(program => println(program.meaning))
 ````
 
 Execution flow:
+
 1. Parses Whilelang source file
 2. Builds AST using shared parser rules
 3. Converts AST to Scala code via `meaning` extension
@@ -225,6 +241,7 @@ trait ContextValue:
 ---
 
 This transpiler demonstrates:
+
 - Source-to-source compilation techniques
 - AST-based code generation
 - Shared infrastructure with interpreter

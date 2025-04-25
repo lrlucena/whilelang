@@ -1,0 +1,68 @@
+site_name: WhileLang
+site_description: A minimalistic programming language built with Scala and ANTLR
+site_url: https://your-domain.com/whilelang
+repo_name: lrlucena/whilelang
+repo_url: https://github.com/lrlucena/whilelang
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - toc.integrate
+    - content.code.annotate
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.snippets
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+#  - minify:
+#      minify_html: true
+
+nav:
+  - Home: index.md
+  - Interpreter: interpreter.md
+  - Transpiler: transpiler.md
+  - Examples:
+    - Hello World: examples/hello.md
+    - Fibonacci: examples/fib.md
+  - API Reference: api.md
+  - Changelog: changelog.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/lrlucena/whilelang

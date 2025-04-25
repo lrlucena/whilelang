@@ -1,5 +1,11 @@
 # Grammar
 
+```antlr linenums="1" title="Whilelang.g4"
+--8<--
+src/main/antlr4/whilelang/parser/Whilelang.g4
+--8<--
+```
+
 ```antlr
 grammar Whilelang;
 

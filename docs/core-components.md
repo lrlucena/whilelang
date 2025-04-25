@@ -53,6 +53,7 @@ Space: [ \t\n\r] -> skip;  // Whitespace handling
 ````
 
 Key features:
+
 - Simple expression hierarchy with basic arithmetic operations
 - Classic control structures (if/else, while)
 - I/O operations through read/write statements
@@ -63,6 +64,12 @@ Key features:
 ## Abstract Syntax Tree (AST)
 
 The AST is defined using Scala 3 enums for type-safe tree construction:
+
+```scala linenums="1"
+--8<--
+src/main/scala/whilelang/parser/Syntax.scala
+--8<--
+```
 
 ````scala
 package whilelang.parser
@@ -97,6 +104,7 @@ enum Bool:
 ````
 
 The AST provides:
+
 - Type-safe representation of program structure
 - Pattern-matchable cases for semantic analysis
 - Clear separation of statements, expressions, and boolean logic
@@ -106,6 +114,12 @@ The AST provides:
 ## Parser Implementation
 
 Shared ANTLR listener that builds the AST:
+
+```scala linenums="1"
+--8<--
+src/main/scala/whilelang/parser/MyListener.scala
+--8<--
+```
 
 ````scala
 package whilelang.parser
@@ -128,6 +142,7 @@ class MyListener extends WhilelangBaseListener with ContextValue:
 ````
 
 Parser features:
+
 - Inherits from ANTLR-generated WhilelangBaseListener
 - Uses ContextValue trait for tree property management
 - Constructs typed AST nodes during parse tree walk
@@ -142,6 +157,13 @@ Parser features:
 
 Provides tree property management:
 
+
+```scala linenums="1"
+--8<--
+src/main/scala/whilelang/util/ContextValue.scala
+--8<--
+```
+
 ````scala
 package whilelang.util
 
@@ -154,6 +176,7 @@ trait ContextValue:
 ````
 
 Purpose:
+
 - Stores intermediate values during parse tree construction
 - Enables type-safe value retrieval
 - Facilitates AST node creation
@@ -161,6 +184,12 @@ Purpose:
 ### Walker Component
 
 Manages parsing workflow:
+
+```scala linenums="1"
+--8<--
+src/main/scala/whilelang/util/Walker.scala
+--8<--
+```
 
 ````scala
 package whilelang.util
@@ -182,6 +211,7 @@ object Walker:
 ````
 
 Features:
+
 - ANTLR stream management
 - Error listener integration
 - Parse tree walking
@@ -189,6 +219,12 @@ Features:
 ### Runner Class
 
 Handles file processing and error management:
+
+```scala linenums="1"
+--8<--
+src/main/scala/whilelang/util/Runner.scala
+--8<--
+```
 
 ````scala
 package whilelang.util
@@ -202,6 +238,7 @@ object Runner:
 ````
 
 Responsibilities:
+
 - File I/O operations
 - Error handling
 - Pipeline coordination

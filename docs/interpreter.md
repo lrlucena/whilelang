@@ -23,6 +23,12 @@ sbt> runMain whilelang.interpreter.main sum.while
 
 The interpreter implements operational semantics through extension methods:
 
+```scala linenums="1"
+--8<--
+src/main/scala/whilelang/interpreter/Semantics.scala
+--8<--
+```
+
 ````scala
 package whilelang.interpreter
 
@@ -65,6 +71,7 @@ extension(exp: Bool)(using env: Environment)
 ````
 
 Key characteristics:
+
 - Mutable environment for variable storage
 - Strict evaluation semantics
 - Direct mapping from AST nodes to execution logic
@@ -75,6 +82,13 @@ Key characteristics:
 ## Main Entry Point
 
 Coordinates the interpretation pipeline:
+
+```scala linenums="1"
+--8<--
+src/main/scala/whilelang/interpreter/Main.scala
+--8<--
+```
+
 
 ````scala
 package whilelang.interpreter
@@ -87,6 +101,7 @@ import whilelang.util.Runner
 ````
 
 Execution flow:
+
 1. Parses input file using shared [Walker component](core-components.md#walker)
 2. Builds AST via shared [parser implementation](core-components.md#parser-implementation)
 3. Executes program using interpreter semantics
@@ -97,8 +112,8 @@ Execution flow:
 ## Differences from Transpiler
 
 While sharing the [core components](core-components.md), the interpreter:
+
 1. Directly evaluates AST nodes instead of generating code
 2. Maintains runtime state rather than tracking variables for declaration
 3. Uses native Scala I/O operations instead of generating I/O code
 4. Implements control flow through Scala's native constructs
-````
